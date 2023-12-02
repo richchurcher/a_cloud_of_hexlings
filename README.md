@@ -30,6 +30,7 @@ ears, but can also engage his foes. She dispells the fog of war and acts as his 
 
 ### Starcraft 2
 
+![carriers](https://github.com/richchurcher/bevy_jam_4/assets/171905/f52b1fe0-f48b-4563-9178-1f1d8a47257c)
 
 Carriers are just fun to play. They take a long time to build up to full strength, but are
 devastating to certain enemy types.
