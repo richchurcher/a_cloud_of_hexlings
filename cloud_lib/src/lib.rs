@@ -1,3 +1,16 @@
+use bevy::prelude::*;
+
+pub mod debug;
+pub mod menu;
+
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+pub enum GameState {
+    #[default]
+    Menu,
+    Paused,
+    Playing,
+}
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
