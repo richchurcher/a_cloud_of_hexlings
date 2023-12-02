@@ -165,4 +165,173 @@ If there's time:
 
 ## Timeline
 
+### Setup
 
+**Complete by:** now-ish
+
+- [x] Game design document
+- [x] Create template repo
+- [ ] Update to latest Bevy
+- [ ] Remove/edit/personalise
+- [ ] Add MIT/Apache2 dual licenses
+
+### Deploy early
+
+**Complete by:** end of day Sunday.
+
+- [ ] Bare-bones title screen
+- [ ] "Hit space to begin"
+- [ ] "Hit escape to exit"
+- [ ] Space leads to _playing_ gamestate with player drawn
+- [ ] Escape leads to _pause_ gamestate with menu
+- [ ] Second escape hit exits
+- [ ] Space in _pause_ state returns to _playing_
+- [ ] WASM builds and can be published to itch.io
+- [ ] Linux builds and runs locally
+- [ ] MacOS builds and runs locally
+- [ ] Windows builds and runs locally
+
+### Simple player movement
+
+**Complete by:** end of day Monday
+
+- [ ] Player can move WASD
+- [ ] Player can animate X axis flip (for charge and recall states)
+
+### Simple environment
+
+**Complete by:** end of day Monday
+
+- [ ] Spike: pre-existing maps (how to store, draw)
+- [ ] Draw a room with an exit
+- [ ] Player collides with walls but can pass through exit
+
+### Simple hexling spawns
+
+**Complete by:** end of day Tuesday
+
+- [ ] Holding down space prompts a simple "shaking" animation, and a hexling appears!
+- [ ] Hexling follows player
+- [ ] Multiple hexlings can be spawned
+- [ ] Hexlings collide with environment but not with exit
+- [ ] Hexlings do not get close enough to player to collide i.e. orbiting
+
+### Simple audio effects
+
+**Complete by:** end of day Wednesday
+
+- [ ] Charge harmonic
+- [ ] Recall harmonic
+- [ ] Spawn hexling harmonic
+- [ ] Hexling collide harmonic? i.e. with each other and possibly with environment
+- [ ] Player collide harmonic (with environment)
+
+### Deploy all
+
+**Complete by:** end of day Wednesday
+
+- [ ] WASM
+- [ ] Linux
+- [ ] MacOS
+- [ ] Windows
+
+### Spawn single enemy in initial room
+
+**Complete by:** end of day Friday (at latest)
+
+- [ ] Enemy has shape and randomly orbits around a fixed point
+- [ ] Enemy will attack on proximity (either player or hexlings)
+- [ ] Enemy will seek to collide with player, which reduces player health
+- [ ] Hexlings can damage enemy by colliding with it, which reduces their health also
+- [ ] Hexlings health does not reduce past a fixed point, but they become degraded
+- [ ] Enemy despawns once destroyed
+- [ ] If player is destroyed, _game over_ state displays
+- [ ] In _game over_, space restarts
+- [ ] In _game over_, escape exits
+
+### Very simple soundtrack
+
+**Complete by:** Saturday morning
+
+- [ ] Don't reach for magical, we need quick and dirty
+- [ ] Recorded and attached to _playing_ state
+- [ ] Stops in _pause_ state
+- [ ] If it's simple, add key controls to change volume
+- [ ] Add enemy sound effects (harmonic or harsher/discordant?)
+
+### Fog of war
+
+**Complete by:** end of day Saturday
+
+- [ ] Player can't see beyond r radius
+- [ ] Player can see radius around each hexling
+- [ ] Fog... looks like fog? If there's time.
+
+### In-game text
+
+**Complete by:** end of day Saturday
+
+- [ ] Text events can appear based on in-game triggers
+- [ ] Text eventually fades
+- [ ] Basic story development and triggers for first room
+
+### First level design
+
+**Complete by:** end of day Saturday
+
+- [ ] Say, four rooms with boss at end
+- [ ] Distribute enemies throughout
+- [ ] Distribute food for hexlings
+- [ ] Hexlings can feed to regain health
+- [ ] Ensure hexling damage is function of health
+- [ ] For the purposes of the theme, allow a _lot_ of hexlings? But also a lot of enemies, for
+  balance.
+- [ ] Story development and triggers for first level
+
+### Deploy all
+
+**Complete by:** Sunday morning
+
+- [ ] WASM
+- [ ] Linux
+- [ ] MacOS
+- [ ] Windows
+
+### More music
+
+**Complete by**: end of day Sunday
+
+- [ ] If you've gotten this far (nice work!) allow yourself the luxury of working on another music
+  track, or making the first one more polished.
+- [ ] Consider a brief title track or theme
+- [ ] Add or polish sound effects
+- [ ] Consider altering music during conflict
+- [ ] Consider a boss fight track
+
+### Second level design
+
+**Complete by:** end of day Monday
+
+- [ ] If complications haven't arisen, add another level
+- [ ] Reduce hexling and enemy numbers in first level to provide growth
+- [ ] Create another boss fight
+- [ ] Create a portal or transition to the new level
+- [ ] Consider adding a success/win screen
+
+### Deploy all
+
+**Complete by:** Monday night, probably laaate
+
+- [ ] WASM
+- [ ] Linux
+- [ ] MacOS
+- [ ] Windows
+
+### SUBMIT
+
+**Complete by:** Monday night
+
+- [ ] Update itch.io description
+- [ ] Links to all builds
+- [ ] Ensure documentation and crate credits are provided
+- [ ] Final checks and play tests
