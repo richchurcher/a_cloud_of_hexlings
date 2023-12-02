@@ -2,7 +2,7 @@
 
 ## Elevator pitch
 
-You are a hexagon. You spawn many child-hexes. These are your drones. You are helpless without them.
+You are a hexagon. You spawn many hexlings. These are your drones. You are helpless without them.
 They are helpless without you. Together, you must survive the hostile geometric darkness in which
 you find yourself.
 
@@ -28,19 +28,44 @@ from you and toward you, completing tasks.
 Bayek and Senu's symbiotic relationship adds a wonderful dimension. Importantly, she is his eyes and
 ears, but can also engage his foes. She dispells the fog of war and acts as his advance scout.
 
+### Starcraft 2
+
+
+Carriers are just fun to play. They take a long time to build up to full strength, but are
+devastating to certain enemy types.
+
 ## Player experience
+
+In a roguelike style, the player moves through "rooms" in an uncertain environment, obscured by fog
+of war. They must depend on their growing relationship with their spawned hexlings, learning more about them and their capabilities as they progress.
 
 ## Platform
 
+Web (WASM), Linux, Windows, MacOS.
+
 ## Development software
+
+- **Bevy Engine**: rendering/ECS/etc
+- **Neovim**: code and debugging
+- **Bitwig Studio**: music and effects
+- TODO: credit crates
 
 ## Genre
 
+Story-driven roguelike.
+
 ## Target audience
+
+People who like an off-beat concept, and who appreciate story provided alongside their mayhem might
+enjoy this game. Also, geometry.
 
 ## Concept
 
 ### Gameplay overview
+
+Initially, the player spawns a single, tiny hexling. They discover they are entirely dependent on it
+to survive. In turn, it must be "fed" raw materials. It follows the player, and can be sent forth at
+a distance or recalled to "home base".
 
 ### Jam theme and how we interpret it
 
