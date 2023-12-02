@@ -1,4 +1,6 @@
-# Bevy Jam 4 Design Document
+# A Cloud of Hexlings
+
+[Bevy Game Jame #4](https://itch.io/jam/bevy-jam-4) entrant, 2023.
 
 ## Elevator pitch
 
@@ -171,9 +173,9 @@ If there's time:
 
 - [x] Game design document
 - [x] Create template repo
-- [ ] Update to latest Bevy
-- [ ] Remove/edit/personalise
-- [ ] Add MIT/Apache2 dual licenses
+- [x] Update to latest Bevy
+- [x] Remove/edit/personalise
+- [x] Add MIT/Apache2 dual licenses
 
 ### Deploy early
 
