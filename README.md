@@ -68,23 +68,100 @@ Initially, the player spawns a single, tiny hexling. They discover they are enti
 to survive. In turn, it must be "fed" raw materials. It follows the player, and can be sent forth at
 a distance or recalled to "home base".
 
+As the story develops, the player sees text updates without interrupting gameplay. The number of
+hexlings will gradually increase, and they will discover the need to "feed" them in order to
+progress. The hexlings may gain abilities such as shield or additional firepower.
+
+Boss fights will present themselves (probably in the form of giant geometric constructs... the
+dreaded Octagonal Orofice, the monstrous Metagon whose number of sides cannot be rationally
+comprehended, and so on).
+
 ### Jam theme and how we interpret it
 
 _That's a LOT of Entities!_
 
+I interpret the theme as the player's dependence on a cloud of hexlings, ever-growing, against
+swarms of enemies that threaten to engulf them. Nothing too complex or esoteric going on here. We'll
+see if various CPUs hold up under the strain.
+
 ### Primary mechanics
+
+#### Rooms and corridors
+
+For some reason, the player is inside. "Inside where?" is a question we do not necessarily need to
+answer. However, they're contained, and they cannot pass through walls or doors so collision
+detection required.
+
+#### Fog of war
+
+The player cannot see far past their own nose. In order to progress, they need to rely on their
+hexlings revealing the local environment. This will lead to a claustrophobic experience, and heavy
+dependence on their symbiotic relationship with their hexling friends.
+
+#### Charge and recall
+
+The hexlings are in one of three states at all times: _orbit_, _charge_, and _recall_. The player
+orders a charge (at which point we signal this state by e.g. flashing the player mesh), and can
+immediately reverse the hexling's direction by recalling them. This may lead to some interesting
+micro with quick changes between the states.
+
+#### Movement
+
+The player can move freely within the environment constraints. How? Trigonometry, of course.
+
+#### Feeding
+
+The hexlings must be fed to recover their strength. A hungry hexling will still function, but at a
+degraded level. They will eventually expire if not fed.
+
+Feeding consists of ordering them to charge close enough to a resource-rich cluster of "food". They
+eat green triangles.
 
 ### Secondary mechanics
 
+#### Traps
+
+Either the player or their hexlings may have their movement restricted or their abilities curtailed
+by fixed traps within the environment. An evolution of the hexlings' powers could include heightened
+"detect traps" ability.
+
 ## Art
+
+Entirely "programmer art". We may be able to add skins to meshes if there's time, but gameplay
+definitely has to come first.
 
 ## Audio
 
 ### Music
 
+We call this style the ad-hoc number 8 wire cobbled together genre. Recorded sounds on mobile phone,
+pasted into tracks. Ideally, it would be nice to use devices like 6/4 time, six-tone chords, etc. to
+reflect the nature of the hexagonal beast.
+
 ### Effects
 
+There is an attempt to make sounds within the game musical. Use of harmonics, ringing tones,
+percussive notes etc. as events occur. Consistency in charge and recall effects e.g. a player should
+start to automatically listen for the recall sound which will assist them in managing the rather
+unconventional control scheme.
+
+Perhaps boss fights can adopt more of a discordant approach. Bosses could use metre consistent with
+the number of sides. We could also lean into harmonious, melodious content when the hexlings are at
+rest or feeding.
+
 ## UI/UX
+
+Consistent location of text updates, large enough to be easily read but unobtrusive. Fades after a
+short time. Triggered by game events.
+
+### Controls
+
+- **WASD**: player movement
+- **Space**: switch between charge and recall states
+- **Escape**: pause, with menu option to quit
+
+If there's time:
+- **R/Q**: fine-tune the hexlings' direction of travel, perhaps in an arc?
 
 ## Timeline
 
