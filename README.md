@@ -195,10 +195,11 @@ If there's time:
 
 ### Simple player movement
 
-**Complete by:** end of day Monday
+**Complete by:** end of day Sunday
 
-- [ ] Player can move WASD
-- [ ] Player can animate X axis flip (for charge and recall states)
+- [x] Player can move WASD
+- [x] Player can animate X axis flip (for charge and recall states)
+- [x] Charge state changes color
 
 ### Simple environment
 
@@ -210,7 +211,7 @@ If there's time:
 
 ### Simple hexling spawns
 
-**Complete by:** end of day Tuesday
+**Complete by:** end of day Monday
 
 - [ ] Holding down space prompts a simple "shaking" animation, and a hexling appears!
 - [ ] Hexling follows player
@@ -220,7 +221,7 @@ If there's time:
 
 ### Simple audio effects
 
-**Complete by:** end of day Wednesday
+**Complete by:** end of day Tuesday
 
 - [ ] Charge harmonic
 - [ ] Recall harmonic
@@ -230,7 +231,7 @@ If there's time:
 
 ### Deploy all
 
-**Complete by:** end of day Wednesday
+**Complete by:** end of day Tuesday
 
 - [ ] WASM
 - [ ] Linux
@@ -239,7 +240,7 @@ If there's time:
 
 ### Spawn single enemy in initial room
 
-**Complete by:** end of day Friday (at latest)
+**Complete by:** end of day Thursday (at latest)
 
 - [ ] Enemy has shape and randomly orbits around a fixed point
 - [ ] Enemy will attack on proximity (either player or hexlings)
@@ -253,7 +254,7 @@ If there's time:
 
 ### Very simple soundtrack
 
-**Complete by:** Saturday morning
+**Complete by:** end of day Friday
 
 - [ ] Don't reach for magical, we need quick and dirty
 - [ ] Recorded and attached to _playing_ state

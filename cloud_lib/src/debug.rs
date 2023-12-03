@@ -9,10 +9,10 @@ impl Plugin for DebugPlugin {
 }
 
 fn print_position(query: Query<(Entity, &Transform)>) {
-    for (entity, transform) in query.iter() {
-        info!(
-            "Entity {:?} translation {:?},",
-            entity, transform.translation
-        );
-    }
+    // for (entity, transform) in query.iter() {
+    //     info!(
+    //         "Entity {:?} translation {:?},",
+    //         entity, transform.translation
+    //     );
+    // }
 }

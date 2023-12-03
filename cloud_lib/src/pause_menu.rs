@@ -49,7 +49,7 @@ fn init(mut commands: Commands) {
             ));
 
             builder.spawn(TextBundle::from_section(
-                "space to play, esc to quit",
+                "enter to play, esc to quit",
                 TextStyle {
                     font_size: 20.0,
                     color: Color::WHITE,
@@ -66,7 +66,7 @@ fn pause_key(keyboard_input: Res<Input<KeyCode>>, mut next_state: ResMut<NextSta
 }
 
 fn menu(keyboard_input: Res<Input<KeyCode>>, mut next_state: ResMut<NextState<GameState>>) {
-    if keyboard_input.just_pressed(KeyCode::Space) {
+    if keyboard_input.just_pressed(KeyCode::Return) {
         next_state.set(GameState::Playing);
     }
 
