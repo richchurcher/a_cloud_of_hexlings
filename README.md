@@ -189,10 +189,9 @@ If there's time:
 - [x] Second escape hit exits
 - [x] Space in _pause_ state returns to _playing_
 - [x] Resurrect simple CI
-- [ ] WASM builds and can be published to itch.io
+- [x] WASM builds and can be published to itch.io
 - [x] Linux builds and runs locally
-- [ ] MacOS builds and runs locally
-- [ ] Windows builds and runs locally
+- [x] Windows builds and runs locally
 
 ### Simple player movement
 

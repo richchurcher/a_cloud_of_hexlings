@@ -209,13 +209,13 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: dist/
-          dest: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
+          dest: a_cloud_of_hexlings_web.zip
       - name: Upload release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
-          asset_name: ${{ env.GAME_EXECUTABLE_NAME }}_${{ env.VERSION }}_web.zip
+          file: a_cloud_of_hexlings_web.zip
+          asset_name: a_cloud_of_hexlings_${{ env.VERSION }}_web.zip
           release_name: ${{ env.VERSION }}
           tag: ${{ env.VERSION }}
           overwrite: true
