@@ -1,21 +1,22 @@
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 
+use crate::movement::{MovingEntityBundle, Velocity};
 use crate::GameState;
+
+const COLOR: Color = Color::WHITE;
+const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 100.);
+const SPEED: f32 = 200.;
 
 #[derive(Component)]
 pub struct Player;
-
-#[derive(Bundle)]
-struct PlayerBundle {
-    shape: MaterialMesh2dBundle<ColorMaterial>,
-}
 
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(GameState::Playing), spawn_player);
+        app.add_systems(OnEnter(GameState::Playing), spawn_player)
+            .add_systems(Update, player_controls);
     }
 }
 
@@ -25,13 +26,43 @@ fn spawn_player(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let shape = MaterialMesh2dBundle {
-        mesh: meshes
-            .add(shape::RegularPolygon::new(100., 6).into())
-            .into(),
-        material: materials.add(ColorMaterial::from(Color::rgb(1.25, 1.4, 1.1))),
-        transform: Transform::from_translation(Vec3::new(200., 0., 100.)),
+        mesh: meshes.add(shape::RegularPolygon::new(50., 6).into()).into(),
+        material: materials.add(ColorMaterial::from(COLOR)),
+        transform: Transform::from_translation(STARTING_TRANSLATION),
         ..default()
     };
 
-    commands.spawn(PlayerBundle { shape }).insert(Player);
+    commands.spawn((
+        MovingEntityBundle {
+            shape,
+            velocity: Velocity::new(Vec3::ZERO),
+        },
+        Player,
+    ));
+}
+
+fn player_controls(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut query: Query<&mut Velocity, With<Player>>,
+    // time: Res<Time>,
+) {
+    let Ok(mut velocity) = query.get_single_mut() else {
+        return;
+    };
+
+    if keyboard_input.pressed(KeyCode::W) {
+        velocity.value.y = SPEED;
+    } else if keyboard_input.pressed(KeyCode::S) {
+        velocity.value.y = -SPEED;
+    } else {
+        velocity.value.y = 0.;
+    }
+
+    if keyboard_input.pressed(KeyCode::A) {
+        velocity.value.x = -SPEED;
+    } else if keyboard_input.pressed(KeyCode::D) {
+        velocity.value.x = SPEED;
+    } else {
+        velocity.value.x = 0.;
+    }
 }
