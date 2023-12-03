@@ -104,16 +104,16 @@ jobs:
         run: |
           strip target/release/${{ env.GAME_EXECUTABLE_NAME }}
           chmod +x target/release/${{ env.GAME_EXECUTABLE_NAME }}
-          mv target/release/${{ env.GAME_EXECUTABLE_NAME }} .
+          mv target/release/${{ env.GAME_EXECUTABLE_NAME }} a_cloud_of_hexlings
       - name: Bundle release
         run: |
-          tar -czf ${{ env.GAME_EXECUTABLE_NAME }}_linux.tar.gz ${{ env.GAME_EXECUTABLE_NAME }} assets credits
+          tar -czf a_cloud_of_hexlings_linux.tar.gz a_cloud_of_hexlings assets credits
       - name: Upload release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.GAME_EXECUTABLE_NAME }}_linux.tar.gz
-          asset_name: ${{ env.GAME_EXECUTABLE_NAME }}_${{ env.VERSION }}_linux.tar.gz
+          file: a_cloud_of_hexlings_linux.tar.gz
+          asset_name: a_cloud_of_hexlings_${{ env.VERSION }}_linux.tar.gz
           release_name: ${{ env.VERSION }}
           tag: ${{ env.VERSION }}
           overwrite: true
