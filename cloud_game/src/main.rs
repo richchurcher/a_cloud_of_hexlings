@@ -6,6 +6,8 @@ fn main() {
         .add_state::<cloud_lib::GameState>()
         .add_systems(Startup, setup)
         .add_plugins(cloud_lib::menu::MenuPlugin)
+        .add_plugins(cloud_lib::pause_menu::PauseMenuPlugin)
+        .add_plugins(cloud_lib::player::PlayerPlugin)
         .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
 }

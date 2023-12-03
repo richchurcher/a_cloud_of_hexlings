@@ -181,13 +181,13 @@ If there's time:
 
 **Complete by:** end of day Sunday.
 
-- [ ] Bare-bones title screen
-- [ ] "Hit space to begin"
-- [ ] "Hit escape to exit"
-- [ ] Space leads to _playing_ gamestate with player drawn
-- [ ] Escape leads to _pause_ gamestate with menu
-- [ ] Second escape hit exits
-- [ ] Space in _pause_ state returns to _playing_
+- [x] Bare-bones title screen
+- [x] "Hit space to begin"
+- [x] "Hit escape to exit"
+- [x] Space leads to _playing_ gamestate with player drawn
+- [x] Escape leads to _pause_ gamestate with menu
+- [x] Second escape hit exits
+- [x] Space in _pause_ state returns to _playing_
 - [ ] WASM builds and can be published to itch.io
 - [ ] Linux builds and runs locally
 - [ ] MacOS builds and runs locally
