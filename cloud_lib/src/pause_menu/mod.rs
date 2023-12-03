@@ -65,17 +65,13 @@ fn pause_key(keyboard_input: Res<Input<KeyCode>>, mut next_state: ResMut<NextSta
     }
 }
 
-fn menu(
-    mut exit: EventWriter<bevy::app::AppExit>,
-    keyboard_input: Res<Input<KeyCode>>,
-    mut next_state: ResMut<NextState<GameState>>,
-) {
+fn menu(keyboard_input: Res<Input<KeyCode>>, mut next_state: ResMut<NextState<GameState>>) {
     if keyboard_input.just_pressed(KeyCode::Space) {
         next_state.set(GameState::Playing);
     }
 
     if keyboard_input.just_pressed(KeyCode::Escape) {
-        exit.send(bevy::app::AppExit);
+        next_state.set(GameState::Menu);
     }
 }
 

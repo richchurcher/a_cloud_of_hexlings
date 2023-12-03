@@ -194,7 +194,7 @@ jobs:
       - name: Build Release
         working-directory: cloud_game
         run: |
-          trunk build --release
+          trunk build --release --dist ../dist
       - name: Optimize Wasm
         uses: NiklasEi/wasm-opt-action@v2
         with:
