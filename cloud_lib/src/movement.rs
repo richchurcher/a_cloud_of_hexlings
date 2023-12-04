@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 use std::f32::consts::PI;
 
+use crate::collision::Collider;
 use crate::player::events::{ChargeEvent, RecallEvent};
 use crate::player::Player;
 use crate::GameState;
@@ -22,6 +23,7 @@ impl Velocity {
 
 #[derive(Bundle)]
 pub struct MovingEntityBundle {
+    pub collider: Collider,
     pub shape: MaterialMesh2dBundle<ColorMaterial>,
     pub velocity: Velocity,
 }
@@ -103,3 +105,4 @@ fn flip_player(
         }
     }
 }
+

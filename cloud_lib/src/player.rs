@@ -3,6 +3,7 @@ pub mod events;
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 
+use crate::collision::Collider;
 use crate::movement::{MovingEntityBundle, Velocity};
 use crate::GameState;
 
@@ -56,6 +57,7 @@ fn spawn_player(
     commands
         .spawn((
             MovingEntityBundle {
+                collider: Collider::new(50.),
                 shape,
                 velocity: Velocity::new(Vec3::ZERO),
             },

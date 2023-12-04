@@ -39,8 +39,9 @@ devastating to certain enemy types.
 
 ## Player experience
 
-In a roguelike style, the player moves through "rooms" in an uncertain environment, obscured by fog
-of war. They must depend on their growing relationship with their spawned hexlings, learning more about them and their capabilities as they progress.
+In a roguelite style, the player moves through "rooms" in an uncertain environment, obscured by fog
+of war. They must depend on their growing relationship with their spawned hexlings, learning more
+about them and their capabilities as they progress.
 
 ## Platform
 
@@ -205,8 +206,8 @@ If there's time:
 
 **Complete by:** end of day Monday
 
-- [ ] Spike: pre-existing maps (how to store, draw)
-- [ ] Draw a room with an exit
+- [x] Procedural generation of rooms according to set dimensions?
+- [x] Draw a room with an exit
 - [ ] Player collides with walls but can pass through exit
 
 ### Simple hexling spawns

@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
+pub mod collision;
 pub mod debug;
+pub mod map;
 pub mod menu;
 pub mod movement;
 pub mod pause_menu;

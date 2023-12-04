@@ -23,7 +23,9 @@ fn main() {
         .add_plugins(cloud_lib::menu::MenuPlugin)
         .add_plugins(cloud_lib::pause_menu::PauseMenuPlugin)
         .add_plugins(cloud_lib::player::PlayerPlugin)
+        .add_plugins(cloud_lib::collision::CollisionPlugin)
         .add_plugins(cloud_lib::movement::MovementPlugin)
+        .add_plugins(cloud_lib::map::MapPlugin)
         .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
 }
