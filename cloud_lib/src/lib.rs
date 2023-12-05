@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 pub mod collision;
 pub mod debug;
+pub mod hexling;
 pub mod map;
 pub mod menu;
 pub mod movement;

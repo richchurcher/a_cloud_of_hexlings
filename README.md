@@ -204,7 +204,7 @@ If there's time:
 
 ### Simple environment
 
-**Complete by:** end of day Monday
+**Complete by:** end of day Tuesday
 
 - [x] Procedural generation of rooms according to set dimensions?
 - [x] Draw a room with an exit
@@ -212,7 +212,7 @@ If there's time:
 
 ### Simple hexling spawns
 
-**Complete by:** end of day Monday
+**Complete by:** end of morning Wednesday
 
 - [ ] Holding down space prompts a simple "shaking" animation, and a hexling appears!
 - [ ] Hexling follows player
@@ -222,7 +222,7 @@ If there's time:
 
 ### Simple audio effects
 
-**Complete by:** end of day Tuesday
+**Complete by:** end of day Wednesday
 
 - [ ] Charge harmonic
 - [ ] Recall harmonic
@@ -232,7 +232,7 @@ If there's time:
 
 ### Deploy all
 
-**Complete by:** end of day Tuesday
+**Complete by:** end of day Wednesday
 
 - [ ] WASM
 - [ ] Linux

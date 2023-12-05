@@ -26,6 +26,7 @@ fn main() {
         .add_plugins(cloud_lib::collision::CollisionPlugin)
         .add_plugins(cloud_lib::movement::MovementPlugin)
         .add_plugins(cloud_lib::map::MapPlugin)
+        .add_plugins(cloud_lib::hexling::HexlingPlugin)
         .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
 }
