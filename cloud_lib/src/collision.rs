@@ -1,13 +1,12 @@
-use bevy::{prelude::*, utils::HashMap};
+use bevy::{prelude::*, render::primitives::Aabb, sprite::collide_aabb, utils::HashMap};
 
 use crate::map::Wall;
-use crate::movement::Velocity;
 use crate::player::Player;
 
 #[derive(Component, Debug)]
 pub struct Collider {
     pub radius: f32,
-    pub colliding_entities: Vec<Entity>,
+    pub colliding_entities: Vec<(Entity, collide_aabb::Collision)>,
 }
 
 impl Collider {
@@ -22,31 +21,41 @@ pub struct CollisionPlugin;
 
 impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, collision_detection)
-            .add_systems(Update, handle_player_collisions);
+        app.add_systems(
+            Update,
+            (collision_detection, handle_player_collisions).chain(),
+        );
     }
 }
 
-fn collision_detection(mut query: Query<(Entity, &GlobalTransform, &mut Collider)>) {
-    let mut colliding_entities: HashMap<Entity, Vec<Entity>> = HashMap::new();
+fn collision_detection(mut query: Query<(Entity, &Aabb, &Transform, &mut Collider)>) {
+    let mut colliding_entities: HashMap<Entity, Vec<(Entity, collide_aabb::Collision)>> =
+        HashMap::new();
 
-    for (entity_a, transform_a, collider_a) in query.iter() {
-        for (entity_b, transform_b, collider_b) in query.iter() {
+    for (entity_a, aabb_a, transform_a, _) in query.iter() {
+        for (entity_b, aabb_b, transform_b, _) in query.iter() {
             if entity_a != entity_b {
-                let distance = transform_a
-                    .translation()
-                    .distance(transform_b.translation());
-                if distance < collider_a.radius + collider_b.radius {
-                    colliding_entities
-                        .entry(entity_a)
-                        .or_insert_with(Vec::new)
-                        .push(entity_b);
+                // TODO: Why does using the `.center` of the Aabb here result in very odd numbers
+                // for the player's x value? e.g. -3.x * 10^-6 or some such nonsense.
+                match collide_aabb::collide(
+                    transform_a.translation,
+                    Vec2::new(aabb_a.half_extents.x * 2., aabb_a.half_extents.y * 2.),
+                    transform_b.translation,
+                    Vec2::new(aabb_b.half_extents.x * 2., aabb_b.half_extents.y * 2.),
+                ) {
+                    Some(c) => {
+                        colliding_entities
+                            .entry(entity_a)
+                            .or_insert_with(Vec::new)
+                            .push((entity_b, c));
+                    }
+                    None => {}
                 }
             }
         }
     }
 
-    for (entity, _, mut collider) in query.iter_mut() {
+    for (entity, _, _, mut collider) in query.iter_mut() {
         collider.colliding_entities.clear();
         if let Some(collisions) = colliding_entities.get(&entity) {
             collider
@@ -56,16 +65,34 @@ fn collision_detection(mut query: Query<(Entity, &GlobalTransform, &mut Collider
     }
 }
 
+// TODO: remove this monstrosity at the earliest opportunity, and replace it with a proper
+// collision system.
 fn handle_player_collisions(
-    mut query: Query<(&mut Velocity, &Collider), With<Player>>,
+    mut query: Query<(&Collider, &mut Transform), With<Player>>,
     wall_query: Query<&Wall>,
 ) {
-    for (mut velocity, collider) in query.iter_mut() {
+    for (collider, mut transform) in query.iter_mut() {
         for &collided_entity in collider.colliding_entities.iter() {
-            if let Ok(_) = wall_query.get(collided_entity) {
-                velocity.value = Vec3::ZERO;
+            if wall_query.get(collided_entity.0).is_ok() {
+                match collided_entity.1 {
+                    collide_aabb::Collision::Top => {
+                        transform.translation.y += 4.;
+                    }
+                    collide_aabb::Collision::Bottom => {
+                        transform.translation.y -= 4.;
+                    }
+                    collide_aabb::Collision::Left => {
+                        transform.translation.x -= 4.;
+                    }
+                    collide_aabb::Collision::Right => {
+                        transform.translation.x += 4.;
+                    }
+                    collide_aabb::Collision::Inside => {
+                        transform.translation.x += 4.;
+                        transform.translation.y += 4.;
+                    }
+                }
             }
         }
     }
 }
-

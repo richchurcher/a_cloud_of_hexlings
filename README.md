@@ -208,7 +208,7 @@ If there's time:
 
 - [x] Procedural generation of rooms according to set dimensions?
 - [x] Draw a room with an exit
-- [ ] Player collides with walls but can pass through exit
+- [x] Player collides with walls but can pass through exit
 
 ### Simple hexling spawns
 

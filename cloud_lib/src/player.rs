@@ -16,7 +16,7 @@ pub enum HexlingState {
 
 const CHARGE_COLOR: Color = Color::rgb(3.25, 2.4, 1.1);
 const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
-const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 100.);
+const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
 const SPEED: f32 = 200.;
 
 #[derive(Component)]
@@ -58,6 +58,7 @@ fn spawn_player(
         .spawn((
             MovingEntityBundle {
                 collider: Collider::new(50.),
+                // rigid_body: RigidBody::Dynamic,
                 shape,
                 velocity: Velocity::new(Vec3::ZERO),
             },

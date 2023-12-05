@@ -24,6 +24,7 @@ impl Velocity {
 #[derive(Bundle)]
 pub struct MovingEntityBundle {
     pub collider: Collider,
+    // pub rigid_body: RigidBody,
     pub shape: MaterialMesh2dBundle<ColorMaterial>,
     pub velocity: Velocity,
 }
@@ -105,4 +106,3 @@ fn flip_player(
         }
     }
 }
-
