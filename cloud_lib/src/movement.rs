@@ -3,7 +3,7 @@ use bevy::sprite::MaterialMesh2dBundle;
 use std::f32::consts::PI;
 
 use crate::collision::Collider;
-use crate::player::events::{ChargeEvent, RecallEvent};
+use crate::player::events::{ChargeEvent, RecallEvent, SpawnHexlingEvent};
 use crate::player::Player;
 use crate::GameState;
 
@@ -38,6 +38,7 @@ impl Plugin for MovementPlugin {
             (
                 update_position.run_if(in_state(GameState::Playing)),
                 flip_player.run_if(in_state(GameState::Playing)),
+                spin_player.run_if(in_state(GameState::Playing)),
             ),
         );
     }
@@ -104,5 +105,37 @@ fn flip_player(
         if let Some(material) = materials.get_mut(material_handle) {
             material.color = RECALL_COLOR;
         }
+    }
+}
+
+fn spin_player(
+    mut animations: ResMut<Assets<AnimationClip>>,
+    mut ev_spawn_hexling: EventReader<SpawnHexlingEvent>,
+    mut query: Query<(&mut AnimationPlayer, &Name), With<Player>>,
+) {
+    let Ok((mut animation_player, name)) = query.get_single_mut() else {
+        return;
+    };
+    if !ev_spawn_hexling.is_empty() {
+        ev_spawn_hexling.clear();
+
+        let mut spinamation = AnimationClip::default();
+        spinamation.add_curve_to_path(
+            EntityPath {
+                parts: vec![name.clone()],
+            },
+            VariableCurve {
+                keyframe_timestamps: vec![0.0, 0.1, 0.2, 0.3],
+                keyframes: Keyframes::Rotation(vec![
+                    Quat::IDENTITY,
+                    Quat::from_axis_angle(Vec3::Z, PI / 3.),
+                    Quat::from_axis_angle(Vec3::Z, PI / 3. * 2.),
+                    Quat::from_axis_angle(Vec3::Z, PI),
+                ]),
+            },
+        );
+
+        let handle = animations.add(spinamation);
+        animation_player.play(handle);
     }
 }

@@ -14,6 +14,13 @@ pub enum HexlingState {
     Charging,
 }
 
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+pub enum HexlingSpawnState {
+    #[default]
+    Idle,
+    Spawning,
+}
+
 const CHARGE_COLOR: Color = Color::rgb(3.25, 2.4, 1.1);
 const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
 const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
@@ -42,9 +49,17 @@ impl Plugin for PlayerPlugin {
                 Update,
                 hexling_charge.run_if(in_state(HexlingState::Recalling)),
             )
+            .add_systems(
+                Update,
+                (
+                    hexling_spawn.run_if(in_state(HexlingSpawnState::Idle)),
+                    hexling_spawn_reset.run_if(in_state(HexlingSpawnState::Spawning)),
+                ),
+            )
             .add_event::<events::ChargeEvent>()
             .add_event::<events::RecallEvent>()
             .add_event::<events::SpawnHexlingEvent>()
+            .add_state::<HexlingSpawnState>()
             .add_state::<HexlingState>();
     }
 }
@@ -76,13 +91,10 @@ fn spawn_player(
 }
 
 fn player_controls(
-    mut ev_spawn_hexling: EventWriter<events::SpawnHexlingEvent>,
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<(Entity, &mut Velocity), With<Player>>,
-    mut spawn_key_held: ResMut<SpawnKeyHeld>,
-    time: Res<Time>,
+    mut query: Query<&mut Velocity, With<Player>>,
 ) {
-    let Ok((entity, mut velocity)) = query.get_single_mut() else {
+    let Ok(mut velocity) = query.get_single_mut() else {
         return;
     };
 
@@ -101,17 +113,36 @@ fn player_controls(
     } else {
         velocity.value.x = 0.;
     }
+}
 
-    if keyboard_input.pressed(KeyCode::Space) {
+fn hexling_spawn(
+    mut ev_spawn_hexling: EventWriter<events::SpawnHexlingEvent>,
+    keyboard_input: Res<Input<KeyCode>>,
+    mut next_state: ResMut<NextState<HexlingSpawnState>>,
+    mut query: Query<Entity, With<Player>>,
+    mut spawn_key_held: ResMut<SpawnKeyHeld>,
+    time: Res<Time>,
+) {
+    let Ok(entity) = query.get_single_mut() else {
+        return;
+    };
+    if keyboard_input.pressed(KeyCode::ShiftLeft) {
         spawn_key_held.duration += time.delta().as_millis();
-    }
-
-    if keyboard_input.just_released(KeyCode::Space) {
         if spawn_key_held.duration >= 2000 {
-            println!("spawn_key_held.duration: {}", spawn_key_held.duration);
             ev_spawn_hexling.send(events::SpawnHexlingEvent(entity));
+            next_state.set(HexlingSpawnState::Spawning);
         }
+    }
+}
+
+fn hexling_spawn_reset(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut next_state: ResMut<NextState<HexlingSpawnState>>,
+    mut spawn_key_held: ResMut<SpawnKeyHeld>,
+) {
+    if keyboard_input.just_released(KeyCode::ShiftLeft) {
         spawn_key_held.duration = 0;
+        next_state.set(HexlingSpawnState::Idle);
     }
 }
 
@@ -120,18 +151,13 @@ fn hexling_recall(
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
     mut query: Query<Entity, With<Player>>,
-    mut spawn_key_held: ResMut<SpawnKeyHeld>,
 ) {
     let Ok(entity) = query.get_single_mut() else {
         return;
     };
     if keyboard_input.just_released(KeyCode::Space) {
-        if spawn_key_held.duration < 2000 {
-            println!("spawn_key_held.duration: {}", spawn_key_held.duration);
-            ev_recall.send(events::RecallEvent(entity));
-            next_state.set(HexlingState::Recalling);
-            spawn_key_held.duration = 0;
-        }
+        ev_recall.send(events::RecallEvent(entity));
+        next_state.set(HexlingState::Recalling);
     }
 }
 
@@ -140,17 +166,12 @@ fn hexling_charge(
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
     mut query: Query<Entity, With<Player>>,
-    mut spawn_key_held: ResMut<SpawnKeyHeld>,
 ) {
     let Ok(entity) = query.get_single_mut() else {
         return;
     };
     if keyboard_input.just_released(KeyCode::Space) {
-        if spawn_key_held.duration < 2000 {
-            println!("spawn_key_held.duration: {}", spawn_key_held.duration);
-            ev_charge.send(events::ChargeEvent(entity));
-            next_state.set(HexlingState::Charging);
-            spawn_key_held.duration = 0;
-        }
+        ev_charge.send(events::ChargeEvent(entity));
+        next_state.set(HexlingState::Charging);
     }
 }

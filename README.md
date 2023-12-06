@@ -161,6 +161,7 @@ short time. Triggered by game events.
 
 - **WASD**: player movement
 - **Space**: switch between charge and recall states
+- **Left Shift**: spawn hexling(s)
 - **Escape**: pause, with menu option to quit
 
 If there's time:
@@ -214,7 +215,7 @@ If there's time:
 
 **Complete by:** end of morning Wednesday
 
-- [ ] Holding down space prompts a simple "shaking" animation, and a hexling appears!
+- [x] Holding down left shift prompts a simple spinning animation, and a hexling appears!
 - [ ] Hexling follows player
 - [ ] Multiple hexlings can be spawned
 - [ ] Hexlings collide with environment but not with exit
