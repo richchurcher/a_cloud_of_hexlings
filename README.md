@@ -221,7 +221,7 @@ If there's time:
 - [x] Hexlings collide with environment, and each other, but not with exit
 - [x] Hexlings do not get close enough to player to collide i.e. orbiting
 - [x] Hexlings move out of player's way (perhaps scatter like bowling pins?)
-- [ ] Hexling charge (recall should just work?)
+- [x] Hexling charge (recall should just work?)
 
 ### Simple audio effects
 

@@ -6,7 +6,7 @@ use std::f32::consts::PI;
 
 use crate::collision::Collider;
 use crate::map::{Source, Wall};
-use crate::player::{events::SpawnHexlingEvent, Player};
+use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
 
 #[derive(Component)]
 pub struct Hexling;
@@ -16,7 +16,14 @@ pub struct HexlingPlugin;
 impl Plugin for HexlingPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, hexling_spawner)
-            .add_systems(Update, hexling_mover);
+            .add_systems(
+                Update,
+                hexling_recall.run_if(in_state(HexlingState::Recalling)),
+            )
+            .add_systems(
+                Update,
+                hexling_charge.run_if(in_state(HexlingState::Charging)),
+            );
     }
 }
 
@@ -40,7 +47,7 @@ fn hexling_spawner(
         // Various greens
         let color = Color::rgb(
             a_rng.gen_range(0.0..0.1),
-            a_rng.gen_range(0.8..1.0),
+            a_rng.gen_range(0.7..1.0),
             a_rng.gen_range(0.0..0.1),
         );
         let translation = Vec3::new(
@@ -64,7 +71,7 @@ fn hexling_spawner(
     }
 }
 
-fn hexling_mover(
+fn hexling_recall(
     player_query: Query<&Transform, With<Player>>,
     mut hexling_query: Query<&mut Transform, (With<Hexling>, Without<Player>)>,
 ) {
@@ -79,5 +86,18 @@ fn hexling_mover(
         if direction.length() < 90. {
             hexling_transform.translation -= direction.normalize() * 4.;
         }
+    }
+}
+
+fn hexling_charge(
+    player_query: Query<&Transform, With<Player>>,
+    mut hexling_query: Query<&mut Transform, (With<Hexling>, Without<Player>)>,
+) {
+    let Ok(player_transform) = player_query.get_single() else {
+        return;
+    };
+    for mut hexling_transform in hexling_query.iter_mut() {
+        let direction = player_transform.translation - hexling_transform.translation;
+        hexling_transform.translation -= direction.normalize() * 4.;
     }
 }

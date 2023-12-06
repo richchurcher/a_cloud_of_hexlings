@@ -64,7 +64,9 @@ fn generate_room(
             v.x += 18.;
             continue;
         }
-        let color = Color::rgb(a_rng.gen_range(0.0..1.0), a_rng.gen_range(0.0..1.0), 0.);
+        let warmth = a_rng.gen_range(0.4..0.6);
+        let base_color = a_rng.gen_range(0.3..0.5);
+        let color = Color::rgb(warmth, base_color, base_color);
         commands.spawn((
             MaterialMesh2dBundle {
                 mesh: meshes.add(shape::RegularPolygon::new(10., 5).into()).into(),
@@ -85,7 +87,9 @@ fn generate_room(
             v.y -= 18.;
             continue;
         }
-        let color = Color::rgb(a_rng.gen_range(0.0..1.0), a_rng.gen_range(0.0..1.0), 0.);
+        let warmth = a_rng.gen_range(0.4..0.6);
+        let base_color = a_rng.gen_range(0.3..0.5);
+        let color = Color::rgb(warmth, base_color, base_color);
         commands.spawn((
             MaterialMesh2dBundle {
                 mesh: meshes.add(shape::RegularPolygon::new(10., 5).into()).into(),
@@ -106,7 +110,9 @@ fn generate_room(
             v.x -= 18.;
             continue;
         }
-        let color = Color::rgb(a_rng.gen_range(0.0..1.0), a_rng.gen_range(0.0..1.0), 0.);
+        let warmth = a_rng.gen_range(0.4..0.6);
+        let base_color = a_rng.gen_range(0.3..0.5);
+        let color = Color::rgb(warmth, base_color, base_color);
         commands.spawn((
             MaterialMesh2dBundle {
                 mesh: meshes.add(shape::RegularPolygon::new(10., 5).into()).into(),
@@ -127,7 +133,9 @@ fn generate_room(
             v.y += 18.;
             continue;
         }
-        let color = Color::rgb(a_rng.gen_range(0.0..1.0), a_rng.gen_range(0.0..1.0), 0.);
+        let warmth = a_rng.gen_range(0.4..0.6);
+        let base_color = a_rng.gen_range(0.3..0.5);
+        let color = Color::rgb(warmth, base_color, base_color);
         commands.spawn((
             MaterialMesh2dBundle {
                 mesh: meshes.add(shape::RegularPolygon::new(10., 5).into()).into(),
