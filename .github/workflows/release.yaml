@@ -107,7 +107,7 @@ jobs:
           mv target/release/${{ env.GAME_EXECUTABLE_NAME }} a_cloud_of_hexlings
       - name: Bundle release
         run: |
-          tar -czf a_cloud_of_hexlings_linux.tar.gz a_cloud_of_hexlings assets credits
+          tar -czf a_cloud_of_hexlings_linux.tar.gz a_cloud_of_hexlings cloud_game/assets credits
       - name: Upload release
         uses: svenstaro/upload-release-action@v2
         with:
