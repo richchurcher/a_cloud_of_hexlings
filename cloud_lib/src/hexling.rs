@@ -1,9 +1,11 @@
+use bevy::audio::{PlaybackMode, PlaybackSettings};
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 use bevy_rand::prelude::*;
 use rand::prelude::Rng;
 use std::f32::consts::PI;
 
+use crate::assets::SpawnHexlingEffect;
 use crate::collision::Collider;
 use crate::map::{Source, Wall};
 use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
@@ -28,6 +30,7 @@ impl Plugin for HexlingPlugin {
 }
 
 fn hexling_spawner(
+    asset_server: Res<AssetServer>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
@@ -43,6 +46,14 @@ fn hexling_spawner(
     };
     if !ev_spawn_hexling.is_empty() {
         ev_spawn_hexling.clear();
+
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/e.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
 
         // Various greens
         let color = Color::rgb(

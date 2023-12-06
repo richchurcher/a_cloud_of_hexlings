@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+pub mod assets;
 pub mod collision;
 pub mod debug;
 pub mod hexling;
