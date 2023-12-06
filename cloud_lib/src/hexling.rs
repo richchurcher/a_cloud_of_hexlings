@@ -6,13 +6,17 @@ use std::f32::consts::PI;
 
 use crate::collision::Collider;
 use crate::map::{Source, Wall};
-use crate::player::events::SpawnHexlingEvent;
+use crate::player::{events::SpawnHexlingEvent, Player};
+
+#[derive(Component)]
+pub struct Hexling;
 
 pub struct HexlingPlugin;
 
 impl Plugin for HexlingPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, hexling_spawner);
+        app.add_systems(Update, hexling_spawner)
+            .add_systems(Update, hexling_mover);
     }
 }
 
@@ -21,25 +25,59 @@ fn hexling_spawner(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     mut ev_spawn_hexling: EventReader<SpawnHexlingEvent>,
+    mut player_query: Query<&mut Transform, With<Player>>,
     mut query: Query<&mut EntropyComponent<ChaCha8Rng>, With<Source>>,
 ) {
     let Ok(mut a_rng) = query.get_single_mut() else {
         return;
     };
+    let Ok(player_transform) = player_query.get_single_mut() else {
+        return;
+    };
     if !ev_spawn_hexling.is_empty() {
         ev_spawn_hexling.clear();
 
-        let color = Color::rgb(a_rng.gen_range(0.0..1.0), a_rng.gen_range(0.0..1.0), 0.);
-        commands.spawn((
-            MaterialMesh2dBundle {
-                mesh: meshes.add(shape::RegularPolygon::new(10., 5).into()).into(),
-                material: materials.add(ColorMaterial::from(color)),
-                transform: Transform::from_translation(Vec3::ZERO)
-                    .with_rotation(Quat::from_rotation_z(a_rng.gen_range(0.0..PI))),
-                ..default()
-            },
-            Collider::new(18.),
-            Wall,
-        ));
+        // Various greens
+        let color = Color::rgb(
+            a_rng.gen_range(0.0..0.1),
+            a_rng.gen_range(0.8..1.0),
+            a_rng.gen_range(0.0..0.1),
+        );
+        let translation = Vec3::new(
+            player_transform.translation.x + a_rng.gen_range(75.0..95.0),
+            player_transform.translation.y + a_rng.gen_range(75.0..95.0),
+            0.,
+        );
+        commands
+            .spawn((
+                MaterialMesh2dBundle {
+                    mesh: meshes.add(shape::RegularPolygon::new(8., 6).into()).into(),
+                    material: materials.add(ColorMaterial::from(color)),
+                    transform: Transform::from_translation(translation)
+                        .with_rotation(Quat::from_rotation_z(a_rng.gen_range(0.0..PI))),
+                    ..default()
+                },
+                Collider::new(18.),
+                Wall,
+            ))
+            .insert(Hexling);
+    }
+}
+
+fn hexling_mover(
+    player_query: Query<&Transform, With<Player>>,
+    mut hexling_query: Query<&mut Transform, (With<Hexling>, Without<Player>)>,
+) {
+    let Ok(player_transform) = player_query.get_single() else {
+        return;
+    };
+    for mut hexling_transform in hexling_query.iter_mut() {
+        let direction = player_transform.translation - hexling_transform.translation;
+        if direction.length() > 100. {
+            hexling_transform.translation += direction.normalize() * 2.;
+        }
+        if direction.length() < 90. {
+            hexling_transform.translation -= direction.normalize() * 4.;
+        }
     }
 }

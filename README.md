@@ -213,13 +213,15 @@ If there's time:
 
 ### Simple hexling spawns
 
-**Complete by:** end of morning Wednesday
+**Complete by:** end of day Wednesday
 
 - [x] Holding down left shift prompts a simple spinning animation, and a hexling appears!
-- [ ] Hexling follows player
-- [ ] Multiple hexlings can be spawned
-- [ ] Hexlings collide with environment but not with exit
-- [ ] Hexlings do not get close enough to player to collide i.e. orbiting
+- [x] Hexling follows player
+- [x] Multiple hexlings can be spawned
+- [x] Hexlings collide with environment, and each other, but not with exit
+- [x] Hexlings do not get close enough to player to collide i.e. orbiting
+- [x] Hexlings move out of player's way (perhaps scatter like bowling pins?)
+- [ ] Hexling charge (recall should just work?)
 
 ### Simple audio effects
 
@@ -237,7 +239,6 @@ If there's time:
 
 - [ ] WASM
 - [ ] Linux
-- [ ] MacOS
 - [ ] Windows
 
 ### Spawn single enemy in initial room

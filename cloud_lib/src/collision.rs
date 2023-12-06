@@ -1,5 +1,6 @@
 use bevy::{prelude::*, render::primitives::Aabb, sprite::collide_aabb, utils::HashMap};
 
+use crate::hexling::Hexling;
 use crate::map::Wall;
 use crate::player::Player;
 
@@ -23,7 +24,12 @@ impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (collision_detection, handle_player_collisions).chain(),
+            (
+                collision_detection,
+                handle_player_collisions,
+                handle_hexling_collisions,
+            )
+                .chain(),
         );
     }
 }
@@ -91,6 +97,34 @@ fn handle_player_collisions(
                         transform.translation.x += 4.;
                         transform.translation.y += 4.;
                     }
+                }
+            }
+        }
+    }
+}
+
+// TODO: duplication, expedient for now
+fn handle_hexling_collisions(
+    mut query: Query<(&Collider, &mut Transform), (With<Hexling>, Without<Player>)>,
+) {
+    for (collider, mut transform) in query.iter_mut() {
+        for &collided_entity in collider.colliding_entities.iter() {
+            match collided_entity.1 {
+                collide_aabb::Collision::Top => {
+                    transform.translation.y += 4.;
+                }
+                collide_aabb::Collision::Bottom => {
+                    transform.translation.y -= 4.;
+                }
+                collide_aabb::Collision::Left => {
+                    transform.translation.x -= 4.;
+                }
+                collide_aabb::Collision::Right => {
+                    transform.translation.x += 4.;
+                }
+                collide_aabb::Collision::Inside => {
+                    transform.translation.x += 4.;
+                    transform.translation.y += 4.;
                 }
             }
         }
