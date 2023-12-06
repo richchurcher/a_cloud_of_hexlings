@@ -48,7 +48,7 @@ fn hexling_spawner(
         ev_spawn_hexling.clear();
 
         commands.spawn((AudioBundle {
-            source: asset_server.load("audio/e.ogg"),
+            source: asset_server.load("audio/symphony.ogg"),
             settings: PlaybackSettings {
                 mode: PlaybackMode::Once,
                 ..default()
