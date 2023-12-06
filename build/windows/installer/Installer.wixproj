@@ -10,12 +10,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <HarvestDirectory Include="..\..\..\assets">
+        <HarvestDirectory Include="..\..\..\cloud_game\assets">
               <ComponentGroupName>AssetsDirectory</ComponentGroupName>
               <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
               <SuppressRootDirectory>false</SuppressRootDirectory>
         </HarvestDirectory>
-        <BindPath Include="..\..\..\assets" />
+        <BindPath Include="..\..\..\cloud_game\assets" />
     </ItemGroup>
 
     <ItemGroup>
