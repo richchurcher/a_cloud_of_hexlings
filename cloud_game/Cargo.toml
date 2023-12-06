@@ -2,7 +2,7 @@
 authors = ["basie <basie@buckyball.digital>"]
 edition = "2021"
 name = "cloud_game"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
 bevy = { version = "0.12.1", features = ["wayland", "wav"] }
