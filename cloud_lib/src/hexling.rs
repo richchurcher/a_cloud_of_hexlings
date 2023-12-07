@@ -9,6 +9,11 @@ use crate::collision::Collider;
 use crate::map::{Source, Wall};
 use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
 
+const HEXLING_RADIUS: f32 = 6.;
+pub const HEXLING_SPEED: f32 = 200.;
+const MIN_PLAYER_DISTANCE: f32 = 65.;
+const MAX_PLAYER_DISTANCE: f32 = 85.;
+
 #[derive(Component)]
 pub struct Hexling;
 
@@ -61,20 +66,24 @@ fn hexling_spawner(
             a_rng.gen_range(0.0..0.1),
         );
         let translation = Vec3::new(
-            player_transform.translation.x + a_rng.gen_range(75.0..95.0),
-            player_transform.translation.y + a_rng.gen_range(75.0..95.0),
+            player_transform.translation.x
+                + a_rng.gen_range(MIN_PLAYER_DISTANCE..MAX_PLAYER_DISTANCE),
+            player_transform.translation.y
+                + a_rng.gen_range(MIN_PLAYER_DISTANCE..MAX_PLAYER_DISTANCE),
             0.,
         );
         commands
             .spawn((
                 MaterialMesh2dBundle {
-                    mesh: meshes.add(shape::RegularPolygon::new(8., 6).into()).into(),
+                    mesh: meshes
+                        .add(shape::RegularPolygon::new(HEXLING_RADIUS, 6).into())
+                        .into(),
                     material: materials.add(ColorMaterial::from(color)),
                     transform: Transform::from_translation(translation)
                         .with_rotation(Quat::from_rotation_z(a_rng.gen_range(0.0..PI))),
                     ..default()
                 },
-                Collider::new(18.),
+                Collider::new(HEXLING_RADIUS),
                 Wall,
             ))
             .insert(Hexling);
@@ -82,32 +91,37 @@ fn hexling_spawner(
 }
 
 fn hexling_recall(
-    player_query: Query<&Transform, With<Player>>,
     mut hexling_query: Query<&mut Transform, (With<Hexling>, Without<Player>)>,
+    player_query: Query<&Transform, With<Player>>,
+    time: Res<Time>,
 ) {
     let Ok(player_transform) = player_query.get_single() else {
         return;
     };
     for mut hexling_transform in hexling_query.iter_mut() {
         let direction = player_transform.translation - hexling_transform.translation;
-        if direction.length() > 100. {
-            hexling_transform.translation += direction.normalize() * 2.;
+        if direction.length() > MAX_PLAYER_DISTANCE {
+            hexling_transform.translation +=
+                direction.normalize() * HEXLING_SPEED * time.delta_seconds();
         }
-        if direction.length() < 90. {
-            hexling_transform.translation -= direction.normalize() * 4.;
+        if direction.length() < MIN_PLAYER_DISTANCE {
+            // Slowly adjust back to normal orbit distance
+            hexling_transform.translation -= direction.normalize() * 2.;
         }
     }
 }
 
 fn hexling_charge(
-    player_query: Query<&Transform, With<Player>>,
     mut hexling_query: Query<&mut Transform, (With<Hexling>, Without<Player>)>,
+    player_query: Query<&Transform, With<Player>>,
+    time: Res<Time>,
 ) {
     let Ok(player_transform) = player_query.get_single() else {
         return;
     };
     for mut hexling_transform in hexling_query.iter_mut() {
         let direction = player_transform.translation - hexling_transform.translation;
-        hexling_transform.translation -= direction.normalize() * 4.;
+        hexling_transform.translation -=
+            direction.normalize() * HEXLING_SPEED * time.delta_seconds();
     }
 }

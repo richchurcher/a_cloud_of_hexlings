@@ -237,13 +237,21 @@ If there's time:
 
 **Complete by:** end of day Thursday
 
-- [ ] WASM
-- [ ] Linux
-- [ ] Windows
+- [x] WASM
+- [x] Linux
+- [x] Windows
+
+### Some mild refactoring, which is good for the soul
+
+**Complete by:** end of day Thursday
+
+- [x] Re-scale all entities to support smaller screens
+- [x] While you're doing that, refactor all magic numbers
+- [x] Fix pause/play bug
 
 ### Spawn single enemy in initial room
 
-**Complete by:** end of day Thursday
+**Complete by:** end of day Friday
 
 - [ ] Enemy has shape and randomly orbits around a fixed point
 - [ ] Enemy will attack on proximity (either player or hexlings)

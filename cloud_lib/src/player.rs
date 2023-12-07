@@ -22,10 +22,12 @@ pub enum HexlingSpawnState {
     Spawning,
 }
 
-const CHARGE_COLOR: Color = Color::rgb(3.25, 2.4, 1.1);
-const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
+pub const CHARGE_COLOR: Color = Color::rgb(3.25, 2.4, 1.1);
+const PLAYER_RADIUS: f32 = 30.;
+pub const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
+const SPAWN_KEY_MS: u128 = 1500;
+pub const SPEED: f32 = 200.;
 const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
-const SPEED: f32 = 200.;
 
 #[derive(Default, Resource)]
 pub struct SpawnKeyHeld {
@@ -69,9 +71,16 @@ fn spawn_player(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
+    query: Query<&Player>,
 ) {
+    if !query.is_empty() {
+        return;
+    }
+
     let shape = MaterialMesh2dBundle {
-        mesh: meshes.add(shape::RegularPolygon::new(50., 6).into()).into(),
+        mesh: meshes
+            .add(shape::RegularPolygon::new(PLAYER_RADIUS, 6).into())
+            .into(),
         material: materials.add(ColorMaterial::from(RECALL_COLOR)),
         transform: Transform::from_translation(STARTING_TRANSLATION),
         ..default()
@@ -80,7 +89,7 @@ fn spawn_player(
     commands
         .spawn((
             MovingEntityBundle {
-                collider: Collider::new(50.),
+                collider: Collider::new(PLAYER_RADIUS),
                 // rigid_body: RigidBody::Dynamic,
                 shape,
                 velocity: Velocity::new(Vec3::ZERO),
@@ -129,7 +138,7 @@ fn hexling_spawn(
     };
     if keyboard_input.pressed(KeyCode::ShiftLeft) {
         spawn_key_held.duration += time.delta().as_millis();
-        if spawn_key_held.duration >= 2000 {
+        if spawn_key_held.duration >= SPAWN_KEY_MS {
             ev_spawn_hexling.send(events::SpawnHexlingEvent(entity));
             next_state.set(HexlingSpawnState::Spawning);
         }
@@ -183,6 +192,8 @@ fn hexling_charge(
         return;
     };
     if keyboard_input.just_released(KeyCode::Space) {
+        // Is this smart? Probably not, but it makes a neat effect, and is slightly different with
+        // its timings each time!
         ev_charge.send(events::ChargeEvent(entity));
         next_state.set(HexlingState::Charging);
         commands.spawn((AudioBundle {

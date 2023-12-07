@@ -1,8 +1,9 @@
 use bevy::{prelude::*, render::primitives::Aabb, sprite::collide_aabb, utils::HashMap};
 
-use crate::hexling::Hexling;
+use crate::hexling::{Hexling, HEXLING_SPEED};
 use crate::map::Wall;
-use crate::player::Player;
+use crate::movement::Velocity;
+use crate::player::{Player, SPEED};
 
 #[derive(Component, Debug)]
 pub struct Collider {
@@ -75,6 +76,7 @@ fn collision_detection(mut query: Query<(Entity, &Aabb, &Transform, &mut Collide
 // collision system.
 fn handle_player_collisions(
     mut query: Query<(&Collider, &mut Transform), With<Player>>,
+    time: Res<Time>,
     wall_query: Query<&Wall>,
 ) {
     for (collider, mut transform) in query.iter_mut() {
@@ -82,20 +84,20 @@ fn handle_player_collisions(
             if wall_query.get(collided_entity.0).is_ok() {
                 match collided_entity.1 {
                     collide_aabb::Collision::Top => {
-                        transform.translation.y += 4.;
+                        transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
                     }
                     collide_aabb::Collision::Bottom => {
-                        transform.translation.y -= 4.;
+                        transform.translation.y -= (SPEED / 1.25) * time.delta_seconds();
                     }
                     collide_aabb::Collision::Left => {
-                        transform.translation.x -= 4.;
+                        transform.translation.x -= (SPEED / 1.25) * time.delta_seconds();
                     }
                     collide_aabb::Collision::Right => {
-                        transform.translation.x += 4.;
+                        transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
                     }
                     collide_aabb::Collision::Inside => {
-                        transform.translation.x += 4.;
-                        transform.translation.y += 4.;
+                        transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
+                        transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
                     }
                 }
             }
@@ -106,25 +108,26 @@ fn handle_player_collisions(
 // TODO: duplication, expedient for now
 fn handle_hexling_collisions(
     mut query: Query<(&Collider, &mut Transform), (With<Hexling>, Without<Player>)>,
+    time: Res<Time>,
 ) {
     for (collider, mut transform) in query.iter_mut() {
         for &collided_entity in collider.colliding_entities.iter() {
             match collided_entity.1 {
                 collide_aabb::Collision::Top => {
-                    transform.translation.y += 4.;
+                    transform.translation.y += HEXLING_SPEED * time.delta_seconds();
                 }
                 collide_aabb::Collision::Bottom => {
-                    transform.translation.y -= 4.;
+                    transform.translation.y -= HEXLING_SPEED * time.delta_seconds();
                 }
                 collide_aabb::Collision::Left => {
-                    transform.translation.x -= 4.;
+                    transform.translation.x -= HEXLING_SPEED * time.delta_seconds();
                 }
                 collide_aabb::Collision::Right => {
-                    transform.translation.x += 4.;
+                    transform.translation.x += HEXLING_SPEED * time.delta_seconds();
                 }
                 collide_aabb::Collision::Inside => {
-                    transform.translation.x += 4.;
-                    transform.translation.y += 4.;
+                    transform.translation.x += HEXLING_SPEED * time.delta_seconds();
+                    transform.translation.y += HEXLING_SPEED * time.delta_seconds();
                 }
             }
         }

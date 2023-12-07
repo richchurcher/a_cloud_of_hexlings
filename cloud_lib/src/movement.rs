@@ -4,11 +4,8 @@ use std::f32::consts::PI;
 
 use crate::collision::Collider;
 use crate::player::events::{ChargeEvent, RecallEvent, SpawnHexlingEvent};
-use crate::player::Player;
+use crate::player::{Player, CHARGE_COLOR, RECALL_COLOR};
 use crate::GameState;
-
-const CHARGE_COLOR: Color = Color::rgb(3.25, 2.4, 1.1);
-const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
 
 #[derive(Component, Debug)]
 pub struct Velocity {
