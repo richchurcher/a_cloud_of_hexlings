@@ -23,6 +23,7 @@ fn main() {
             ..default()
         }))
         .add_state::<cloud_lib::GameState>()
+        .add_state::<cloud_lib::LevelState>()
         .add_systems(Startup, setup)
         // .add_plugins(cloud_lib::assets::AssetsPlugin)
         .add_plugins(cloud_lib::menu::MenuPlugin)
@@ -32,6 +33,7 @@ fn main() {
         .add_plugins(cloud_lib::movement::MovementPlugin)
         .add_plugins(cloud_lib::map::MapPlugin)
         .add_plugins(cloud_lib::hexling::HexlingPlugin)
+        .add_plugins(cloud_lib::enemy::EnemyPlugin)
         .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
 }

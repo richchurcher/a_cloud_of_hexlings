@@ -3,6 +3,7 @@ use bevy::prelude::*;
 pub mod assets;
 pub mod collision;
 pub mod debug;
+pub mod enemy;
 pub mod hexling;
 pub mod map;
 pub mod menu;
@@ -16,6 +17,13 @@ pub enum GameState {
     Menu,
     Paused,
     Playing,
+}
+
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
+pub enum LevelState {
+    #[default]
+    One,
+    Two,
 }
 
 pub fn add(left: usize, right: usize) -> usize {
