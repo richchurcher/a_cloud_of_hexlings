@@ -225,7 +225,7 @@ If there's time:
 
 ### Simple audio effects
 
-**Complete by:** end of day Wednesday
+**Complete by:** end of day Thursday
 
 - [x] Charge harmonic
 - [x] Recall harmonic
@@ -235,7 +235,7 @@ If there's time:
 
 ### Deploy all
 
-**Complete by:** end of day Wednesday
+**Complete by:** end of day Thursday
 
 - [ ] WASM
 - [ ] Linux
@@ -243,7 +243,7 @@ If there's time:
 
 ### Spawn single enemy in initial room
 
-**Complete by:** end of day Thursday (at latest)
+**Complete by:** end of day Thursday
 
 - [ ] Enemy has shape and randomly orbits around a fixed point
 - [ ] Enemy will attack on proximity (either player or hexlings)

@@ -1,10 +1,12 @@
 use bevy::{
+    asset::AssetMetaCheck,
     core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
     prelude::*,
 };
 
 fn main() {
     App::new()
+        .insert_resource(AssetMetaCheck::Never)
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "a cloud of hexlings".to_string(),
