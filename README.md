@@ -227,11 +227,11 @@ If there's time:
 
 **Complete by:** end of day Wednesday
 
-- [ ] Charge harmonic
-- [ ] Recall harmonic
-- [ ] Spawn hexling harmonic
-- [ ] Hexling collide harmonic? i.e. with each other and possibly with environment
-- [ ] Player collide harmonic (with environment)
+- [x] Charge harmonic
+- [x] Recall harmonic
+- [x] Spawn hexling harmonic
+- [x] Enter game harmonic
+- [x] Pause screen taps
 
 ### Deploy all
 

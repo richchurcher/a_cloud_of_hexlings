@@ -1,5 +1,6 @@
 pub mod events;
 
+use bevy::audio::PlaybackMode;
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 
@@ -147,6 +148,8 @@ fn hexling_spawn_reset(
 }
 
 fn hexling_recall(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
     mut ev_recall: EventWriter<events::RecallEvent>,
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
@@ -158,10 +161,19 @@ fn hexling_recall(
     if keyboard_input.just_released(KeyCode::Space) {
         ev_recall.send(events::RecallEvent(entity));
         next_state.set(HexlingState::Recalling);
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/a.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
     }
 }
 
 fn hexling_charge(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
     mut ev_charge: EventWriter<events::ChargeEvent>,
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
@@ -173,5 +185,47 @@ fn hexling_charge(
     if keyboard_input.just_released(KeyCode::Space) {
         ev_charge.send(events::ChargeEvent(entity));
         next_state.set(HexlingState::Charging);
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/e.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/e2.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/a.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/b.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/g.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
+        commands.spawn((AudioBundle {
+            source: asset_server.load("audio/fsharp3.ogg"),
+            settings: PlaybackSettings {
+                mode: PlaybackMode::Once,
+                ..default()
+            },
+        },));
     }
 }

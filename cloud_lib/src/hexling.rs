@@ -5,7 +5,6 @@ use bevy_rand::prelude::*;
 use rand::prelude::Rng;
 use std::f32::consts::PI;
 
-use crate::assets::SpawnHexlingEffect;
 use crate::collision::Collider;
 use crate::map::{Source, Wall};
 use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
@@ -48,7 +47,7 @@ fn hexling_spawner(
         ev_spawn_hexling.clear();
 
         commands.spawn((AudioBundle {
-            source: asset_server.load("audio/symphony.ogg"),
+            source: asset_server.load("audio/e2.ogg"),
             settings: PlaybackSettings {
                 mode: PlaybackMode::Once,
                 ..default()
