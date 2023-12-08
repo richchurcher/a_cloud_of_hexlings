@@ -7,7 +7,7 @@ use bevy::sprite::MaterialMesh2dBundle;
 const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
 const RADIUS: f32 = 20.;
 const ORBIT_POINT: Vec3 = Vec3::new(-250., 350., 0.);
-const ORBIT_SPEED: f32 = 3000.;
+// const ORBIT_SPEED: f32 = 3000.;
 const SPEED: f32 = 50.;
 const STARTING_TRANSLATION: Vec3 = Vec3::new(-300., 400., 0.);
 
@@ -57,6 +57,6 @@ fn passive_motion(mut query: Query<(&mut Velocity, &mut Transform), With<Enemy>>
         // Orbit fixed point
         let direction = (ORBIT_POINT - transform.translation).normalize();
         let perpendicular = Vec3::new(-direction.y, direction.x, 0.);
-        velocity.value = perpendicular * ORBIT_SPEED * time.delta_seconds();
+        velocity.value = perpendicular * SPEED;
     }
 }

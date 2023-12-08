@@ -256,7 +256,7 @@ If there's time:
 - [x] Itch viewport works seamlessly with fullscreen button
 - [x] Fix `D` key not working on Itch
 - [x] Enemy has shape and orbits around a fixed point
-- [ ] Viewport follows player (and hexlings?)
+- [x] Viewport follows player
 - [ ] Enemy will attack on proximity (either player or hexlings)
 - [ ] Enemy will seek to collide with player, which reduces player health
 - [ ] Hexlings can damage enemy by colliding with it, which reduces their health also

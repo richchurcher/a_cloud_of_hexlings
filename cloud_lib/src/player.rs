@@ -27,7 +27,7 @@ const PLAYER_RADIUS: f32 = 30.;
 pub const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
 const SPAWN_KEY_MS: u128 = 1500;
 pub const SPEED: f32 = 200.;
-const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
+pub const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
 
 #[derive(Default, Resource)]
 pub struct SpawnKeyHeld {

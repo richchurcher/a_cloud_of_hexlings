@@ -75,29 +75,35 @@ fn collision_detection(mut query: Query<(Entity, &Aabb, &Transform, &mut Collide
 // TODO: remove this monstrosity at the earliest opportunity, and replace it with a proper
 // collision system.
 fn handle_player_collisions(
-    mut query: Query<(&Collider, &mut Transform), With<Player>>,
+    mut query: Query<(&Collider, &mut Transform, &mut Velocity), With<Player>>,
     time: Res<Time>,
     wall_query: Query<&Wall>,
 ) {
-    for (collider, mut transform) in query.iter_mut() {
+    for (collider, mut transform, mut velocity) in query.iter_mut() {
         for &collided_entity in collider.colliding_entities.iter() {
             if wall_query.get(collided_entity.0).is_ok() {
                 match collided_entity.1 {
                     collide_aabb::Collision::Top => {
-                        transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
+                        velocity.value.y += SPEED / 2.;
                     }
                     collide_aabb::Collision::Bottom => {
-                        transform.translation.y -= (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.y -= (SPEED / 1.25) * time.delta_seconds();
+                        velocity.value.y -= SPEED / 2.;
                     }
                     collide_aabb::Collision::Left => {
-                        transform.translation.x -= (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.x -= (SPEED / 1.25) * time.delta_seconds();
+                        velocity.value.x -= SPEED / 2.;
                     }
                     collide_aabb::Collision::Right => {
-                        transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
+                        velocity.value.x += SPEED / 2.;
                     }
                     collide_aabb::Collision::Inside => {
-                        transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
-                        transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.y += (SPEED / 1.25) * time.delta_seconds();
+                        // transform.translation.x += (SPEED / 1.25) * time.delta_seconds();
+                        velocity.value.y += SPEED / 2.;
+                        velocity.value.x += SPEED / 2.;
                     }
                 }
             }

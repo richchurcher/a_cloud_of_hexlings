@@ -1,8 +1,4 @@
-use bevy::{
-    asset::AssetMetaCheck,
-    core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
-    prelude::*,
-};
+use bevy::{asset::AssetMetaCheck, prelude::*};
 
 fn main() {
     App::new()
@@ -22,8 +18,8 @@ fn main() {
         }))
         .add_state::<cloud_lib::GameState>()
         .add_state::<cloud_lib::LevelState>()
-        .add_systems(Startup, setup)
         // .add_plugins(cloud_lib::assets::AssetsPlugin)
+        .add_plugins(cloud_lib::camera::CameraPlugin)
         .add_plugins(cloud_lib::menu::MenuPlugin)
         .add_plugins(cloud_lib::pause_menu::PauseMenuPlugin)
         .add_plugins(cloud_lib::player::PlayerPlugin)
@@ -34,18 +30,4 @@ fn main() {
         .add_plugins(cloud_lib::enemy::EnemyPlugin)
         .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
-}
-
-fn setup(mut commands: Commands) {
-    commands.spawn((
-        Camera2dBundle {
-            camera: Camera {
-                hdr: true,
-                ..default()
-            },
-            tonemapping: Tonemapping::TonyMcMapface,
-            ..default()
-        },
-        BloomSettings::default(),
-    ));
 }
