@@ -1,10 +1,11 @@
-use crate::collision::Collider;
-use crate::movement::{MovingEntityBundle, Velocity};
-use crate::LevelState;
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 
+use crate::collision::Collider;
+use crate::movement::{MovingEntityBundle, Velocity};
+use crate::player::Player;
 use crate::GameState;
+use crate::LevelState;
 
 const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
 const RADIUS: f32 = 20.;
@@ -25,7 +26,8 @@ impl Plugin for EnemyPlugin {
                 (maintain_target_list, passive_motion, aggro_motion)
                     .chain()
                     .run_if(in_state(GameState::Playing)),
-            );
+            )
+            .add_systems(Update, attack_target.run_if(in_state(GameState::Playing)));
     }
 }
 
@@ -67,7 +69,7 @@ fn spawn_enemy(
             CombatStats {
                 aggro_radius: 200.,
                 attack_range: 100.,
-                attack_rate: 1.,
+                attack_rate: 10.,
                 base_damage: 1,
                 cooldown: 0.,
                 health: 20,
@@ -123,17 +125,71 @@ fn aggro_motion(
 fn maintain_target_list(
     mut enemy_query: Query<(&mut CombatStats, &Transform), With<Enemy>>,
     friendly_query: Query<(Entity, &Transform), (With<CombatStats>, Without<Enemy>)>,
+    player_query: Query<Entity, With<Player>>,
 ) {
+    let Ok(player_entity) = player_query.get_single() else {
+        return;
+    };
+
     for (mut stats, transform) in enemy_query.iter_mut() {
         for (friendly_entity, friendly_transform) in friendly_query.iter() {
             let direction = transform.translation - friendly_transform.translation;
             if direction.length() < stats.aggro_radius
                 && !stats.target_list.contains(&friendly_entity)
             {
-                // TODO: this implements "last target acquired is most important", which is
-                // probably not what we want.
                 stats.target_list.push(friendly_entity);
             }
+        }
+
+        // Reorder target list for priority:
+        //   - kill player first. Player must die.
+        //   - kill closest hexling only if player is not on the target list
+        stats.target_list.sort_by(|a, b| {
+            if a == &player_entity {
+                return std::cmp::Ordering::Less;
+            }
+            if b == &player_entity {
+                return std::cmp::Ordering::Greater;
+            }
+
+            // OK let's go with the most inefficient approach first...
+            let Ok((_, a_transform)) = friendly_query.get(*a) else {
+                return std::cmp::Ordering::Equal;
+            };
+            let Ok((_, b_transform)) = friendly_query.get(*b) else {
+                return std::cmp::Ordering::Equal;
+            };
+            let a_distance = (transform.translation - a_transform.translation).length();
+            let b_distance = (transform.translation - b_transform.translation).length();
+            match a_distance < b_distance {
+                true => std::cmp::Ordering::Less,
+                false => std::cmp::Ordering::Greater,
+            }
+        });
+    }
+}
+
+fn attack_target(
+    mut enemy_query: Query<(&mut CombatStats, &Transform), With<Enemy>>,
+    mut friendly_query: Query<(&mut CombatStats, &Transform), Without<Enemy>>,
+    time: Res<Time>,
+) {
+    for (mut stats, transform) in enemy_query.iter_mut() {
+        if stats.target_list.is_empty() {
+            continue;
+        }
+        let Ok((mut target_stats, target_transform)) =
+            friendly_query.get_mut(stats.target_list.first().unwrap().to_owned())
+        else {
+            return;
+        };
+        let distance = (transform.translation - target_transform.translation).length();
+        if stats.cooldown <= 0. && target_stats.health > 0 && distance < stats.attack_range {
+            target_stats.health -= stats.base_damage;
+            stats.cooldown = stats.attack_rate * time.delta_seconds();
+            println!(" attack :: health remaining :: {:?}", target_stats.health);
+        } else {
+            stats.cooldown -= time.delta_seconds();
         }
     }
 }

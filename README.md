@@ -258,7 +258,7 @@ If there's time:
 - [x] Enemy has shape and orbits around a fixed point
 - [x] Viewport follows player
 - [x] Enemy will attack on proximity (either player or hexlings)
-- [ ] Enemy will seek to collide with player, which reduces player health
+- [x] Enemy will seek to attack player, which reduces player health
 - [ ] Hexlings can damage enemy by colliding with it, which reduces their health also
 - [ ] Hexlings health does not reduce past a fixed point, but they become degraded
 - [ ] Enemy despawns once destroyed
