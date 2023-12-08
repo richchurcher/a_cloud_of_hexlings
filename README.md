@@ -258,6 +258,10 @@ If there's time:
 - [x] Enemy has shape and orbits around a fixed point
 - [x] Viewport follows player
 - [x] Enemy will attack on proximity (either player or hexlings)
+
+### Enemy interaction
+
+**Complete by**: midday Saturday
 - [x] Enemy will seek to attack player, which reduces player health
 - [ ] Hexlings can damage enemy by colliding with it, which reduces their health also
 - [ ] Hexlings health does not reduce past a fixed point, but they become degraded
@@ -268,7 +272,7 @@ If there's time:
 
 ### Very simple soundtrack
 
-**Complete by:** end of day Friday
+**Complete by:** end of day Saturday
 
 - [ ] Don't reach for magical, we need quick and dirty
 - [ ] Recorded and attached to _playing_ state
@@ -286,7 +290,7 @@ If there's time:
 
 ### In-game text
 
-**Complete by:** end of day Saturday
+**Complete by:** midday Sunday
 
 - [ ] Text events can appear based on in-game triggers
 - [ ] Text eventually fades
@@ -294,7 +298,7 @@ If there's time:
 
 ### First level design
 
-**Complete by:** end of day Saturday
+**Complete by:** end of day Sunday
 
 - [ ] Say, four rooms with boss at end
 - [ ] Distribute enemies throughout
@@ -307,16 +311,16 @@ If there's time:
 
 ### Deploy all
 
-**Complete by:** Sunday morning
+**Complete by:** end of day Sunday
 
 - [ ] WASM
 - [ ] Linux
-- [ ] MacOS
+- [ ] Trial MacOS build?
 - [ ] Windows
 
 ### More music
 
-**Complete by**: end of day Sunday
+**Complete by**: end of day Monday
 
 - [ ] If you've gotten this far (nice work!) allow yourself the luxury of working on another music
   track, or making the first one more polished.
