@@ -254,6 +254,7 @@ If there's time:
 **Complete by:** end of day Friday
 
 - [ ] Enemy has shape and randomly orbits around a fixed point
+- [ ] Viewport follows player (and hexlings?)
 - [ ] Enemy will attack on proximity (either player or hexlings)
 - [ ] Enemy will seek to collide with player, which reduces player health
 - [ ] Hexlings can damage enemy by colliding with it, which reduces their health also
