@@ -11,11 +11,11 @@ body {
 }
 
 .game-container {
-    width: 1000;
-    height: 800;
-    display: flex;
-    justify-content: center;
     align-items: center;
+    display: flex;
+    flex-basis: 0;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 .lds-dual-ring {
@@ -49,7 +49,6 @@ body {
 }
 
 #bevy {
-    width: 0;
-    height: 0;
+    flex-grow: 1;
     z-index: 2;
 }
