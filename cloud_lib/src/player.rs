@@ -28,7 +28,7 @@ const PLAYER_RADIUS: f32 = 30.;
 pub const RECALL_COLOR: Color = Color::rgb(0.25, 0.4, 0.1);
 const SPAWN_KEY_MS: u128 = 1500;
 pub const SPEED: f32 = 200.;
-const STARTING_HEALTH: u32 = 50;
+const STARTING_HEALTH: f32 = 50.;
 pub const STARTING_TRANSLATION: Vec3 = Vec3::new(200., 0., 0.);
 
 #[derive(Default, Resource)]
@@ -90,14 +90,13 @@ fn spawn_player(
                 aggro_radius: 0.,
                 attack_range: 0.,
                 attack_rate: 0.,
-                base_damage: 0,
+                base_damage: 0.,
                 cooldown: 0.,
                 health: STARTING_HEALTH,
                 target_list: Vec::new(),
             },
             MovingEntityBundle {
                 collider: Collider::new(PLAYER_RADIUS),
-                // rigid_body: RigidBody::Dynamic,
                 shape,
                 velocity: Velocity::new(Vec3::ZERO),
             },

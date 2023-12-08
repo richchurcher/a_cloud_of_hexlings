@@ -39,11 +39,11 @@ pub struct CombatStats {
     pub attack_range: f32,
     // Amount by which cooldown is increased following each attack.
     pub attack_rate: f32,
-    pub base_damage: u32,
+    pub base_damage: f32,
     // When cooldown reduces to 0, an attack can be made. Starts at 0, reduces by
     // time.delta_seconds() each tick.
     pub cooldown: f32,
-    pub health: u32,
+    pub health: f32,
     // This list contains all targets. They may not still be within aggro_radius. The list may be
     // re-ordered, and the first entity on the list will always be the primary target.
     pub target_list: Vec<Entity>,
@@ -70,9 +70,9 @@ fn spawn_enemy(
                 aggro_radius: 200.,
                 attack_range: 100.,
                 attack_rate: 10.,
-                base_damage: 1,
+                base_damage: 1.,
                 cooldown: 0.,
-                health: 20,
+                health: 20.,
                 target_list: Vec::new(),
             },
             MovingEntityBundle {
@@ -184,10 +184,9 @@ fn attack_target(
             return;
         };
         let distance = (transform.translation - target_transform.translation).length();
-        if stats.cooldown <= 0. && target_stats.health > 0 && distance < stats.attack_range {
+        if stats.cooldown <= 0. && target_stats.health > 0. && distance < stats.attack_range {
             target_stats.health -= stats.base_damage;
             stats.cooldown = stats.attack_rate * time.delta_seconds();
-            println!(" attack :: health remaining :: {:?}", target_stats.health);
         } else {
             stats.cooldown -= time.delta_seconds();
         }
