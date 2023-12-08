@@ -257,7 +257,7 @@ If there's time:
 - [x] Fix `D` key not working on Itch
 - [x] Enemy has shape and orbits around a fixed point
 - [x] Viewport follows player
-- [ ] Enemy will attack on proximity (either player or hexlings)
+- [x] Enemy will attack on proximity (either player or hexlings)
 - [ ] Enemy will seek to collide with player, which reduces player health
 - [ ] Hexlings can damage enemy by colliding with it, which reduces their health also
 - [ ] Hexlings health does not reduce past a fixed point, but they become degraded

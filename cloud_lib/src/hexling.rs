@@ -6,6 +6,7 @@ use rand::prelude::Rng;
 use std::f32::consts::PI;
 
 use crate::collision::Collider;
+use crate::enemy::CombatStats;
 use crate::map::{Source, Wall};
 use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
 
@@ -85,6 +86,15 @@ fn hexling_spawner(
                 },
                 Collider::new(HEXLING_RADIUS),
                 Wall,
+                CombatStats {
+                    aggro_radius: 0.,
+                    attack_range: 10.,
+                    attack_rate: 1.,
+                    base_damage: 1,
+                    cooldown: 0.,
+                    health: 10,
+                    target_list: Vec::new(),
+                },
             ))
             .insert(Hexling);
     }
