@@ -2,7 +2,6 @@ use bevy::{
     asset::AssetMetaCheck,
     core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
     prelude::*,
-    window::WindowResolution,
 };
 
 fn main() {
@@ -17,7 +16,6 @@ fn main() {
                 fit_canvas_to_parent: true,
                 // Tells wasm not to override default event handling, like F5 and Ctrl+R
                 prevent_default_event_handling: false,
-                resolution: WindowResolution::new(1920., 1080.),
                 ..default()
             }),
             ..default()

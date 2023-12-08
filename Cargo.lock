@@ -1314,7 +1314,7 @@ dependencies = [
 
 [[package]]
 name = "cloud_game"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "bevy",
  "cloud_lib",

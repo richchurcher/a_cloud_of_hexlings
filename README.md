@@ -253,7 +253,9 @@ If there's time:
 
 **Complete by:** end of day Friday
 
-- [ ] Enemy has shape and randomly orbits around a fixed point
+- [x] Itch viewport works seamlessly with fullscreen button
+- [x] Fix `D` key not working on Itch
+- [x] Enemy has shape and orbits around a fixed point
 - [ ] Viewport follows player (and hexlings?)
 - [ ] Enemy will attack on proximity (either player or hexlings)
 - [ ] Enemy will seek to collide with player, which reduces player health

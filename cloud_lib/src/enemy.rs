@@ -6,6 +6,8 @@ use bevy::sprite::MaterialMesh2dBundle;
 
 const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
 const RADIUS: f32 = 20.;
+const ORBIT_POINT: Vec3 = Vec3::new(-250., 350., 0.);
+const ORBIT_SPEED: f32 = 3000.;
 const SPEED: f32 = 50.;
 const STARTING_TRANSLATION: Vec3 = Vec3::new(-300., 400., 0.);
 
@@ -43,7 +45,7 @@ fn spawn_enemy(
                 velocity: Velocity::new(Vec3::ZERO),
             },
             AnimationPlayer::default(),
-            Name::new("player"),
+            Name::new("enemy"),
         ))
         .insert(Enemy);
 }
@@ -51,8 +53,10 @@ fn spawn_enemy(
 fn passive_motion(mut query: Query<(&mut Velocity, &mut Transform), With<Enemy>>, time: Res<Time>) {
     for (mut velocity, mut transform) in query.iter_mut() {
         transform.rotate_z(3. * time.delta_seconds());
-        // TODO: how to emulate random orbits? Can't be every update or will just freak out in
-        // place! Speed is just about perfect though.
-        velocity.value = Vec3::new(0., SPEED, 0.);
+
+        // Orbit fixed point
+        let direction = (ORBIT_POINT - transform.translation).normalize();
+        let perpendicular = Vec3::new(-direction.y, direction.x, 0.);
+        velocity.value = perpendicular * ORBIT_SPEED * time.delta_seconds();
     }
 }
