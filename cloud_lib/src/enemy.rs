@@ -5,13 +5,12 @@ use crate::collision::Collider;
 use crate::movement::{MovingEntityBundle, Velocity};
 use crate::player::Player;
 use crate::GameState;
-use crate::LevelState;
 
-const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
-const RADIUS: f32 = 20.;
+pub const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
+pub const RADIUS: f32 = 20.;
 const ORBIT_POINT: Vec3 = Vec3::new(-250., 350., 0.);
 const SPEED: f32 = 50.;
-const STARTING_TRANSLATION: Vec3 = Vec3::new(-300., 400., 0.);
+pub const STARTING_TRANSLATION: Vec3 = Vec3::new(-300., 400., 0.);
 
 #[derive(Component)]
 pub struct Enemy;
@@ -25,7 +24,9 @@ pub struct EnemyPlugin;
 
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(LevelState::One), spawn_enemy.run_if(run_once()))
+        app.add_systems(Startup, spawn_enemy)
+            .add_systems(OnExit(GameState::Over), spawn_enemy)
+            .add_systems(OnEnter(GameState::Over), despawn_enemy)
             .add_systems(
                 Update,
                 (
@@ -61,11 +62,12 @@ pub struct CombatStats {
     pub target_list: Vec<Entity>,
 }
 
-fn spawn_enemy(
+pub fn spawn_enemy(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
+    println!(":: spawn_enemy ::");
     let shape = MaterialMesh2dBundle {
         mesh: meshes
             .add(shape::RegularPolygon::new(RADIUS, 8).into())
@@ -249,5 +251,11 @@ fn despawn_debris(
         if debris.despawn_timer <= 0. {
             commands.entity(entity).despawn_recursive();
         }
+    }
+}
+
+fn despawn_enemy(mut commands: Commands, query: Query<Entity, With<Enemy>>) {
+    for entity in query.iter() {
+        commands.entity(entity).despawn_recursive();
     }
 }

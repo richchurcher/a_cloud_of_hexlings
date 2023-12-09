@@ -44,6 +44,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(GameState::Playing), spawn_player.run_if(run_once()))
+            .add_systems(OnExit(GameState::Over), spawn_player)
             .init_resource::<SpawnKeyHeld>()
             .add_systems(Update, player_controls.run_if(in_state(GameState::Playing)))
             .add_systems(
@@ -253,6 +254,7 @@ fn splodey(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
+    mut next_state: ResMut<NextState<GameState>>,
     query: Query<(Entity, &CombatStats, &Transform), With<Player>>,
 ) {
     let Ok((entity, stats, transform)) = query.get_single() else {
@@ -282,5 +284,6 @@ fn splodey(
         }
 
         commands.entity(entity).despawn_recursive();
+        next_state.set(GameState::Over);
     }
 }

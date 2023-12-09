@@ -9,13 +9,16 @@ pub mod hexling;
 pub mod map;
 pub mod menu;
 pub mod movement;
+pub mod over_menu;
 pub mod pause_menu;
 pub mod player;
+pub mod reset;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 pub enum GameState {
     #[default]
     Menu,
+    Over,
     Paused,
     Playing,
 }

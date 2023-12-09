@@ -36,7 +36,8 @@ impl Plugin for HexlingPlugin {
             .add_systems(
                 Update,
                 (maintain_target_list, attack_target).run_if(in_state(HexlingState::Charging)),
-            );
+            )
+            .add_systems(OnExit(crate::GameState::Over), despawn_hexlings);
     }
 }
 
@@ -196,5 +197,11 @@ fn attack_target(
         } else {
             stats.cooldown -= time.delta_seconds();
         }
+    }
+}
+
+fn despawn_hexlings(mut commands: Commands, query: Query<Entity, With<crate::hexling::Hexling>>) {
+    for entity in query.iter() {
+        commands.entity(entity).despawn_recursive();
     }
 }

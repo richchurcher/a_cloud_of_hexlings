@@ -3,6 +3,7 @@ use bevy::sprite::MaterialMesh2dBundle;
 use std::f32::consts::PI;
 
 use crate::collision::Collider;
+use crate::enemy::Debris;
 use crate::player::events::{ChargeEvent, RecallEvent, SpawnHexlingEvent};
 use crate::player::{Player, CHARGE_COLOR, RECALL_COLOR};
 use crate::GameState;
@@ -35,6 +36,7 @@ impl Plugin for MovementPlugin {
                 update_position.run_if(in_state(GameState::Playing)),
                 flip_player.run_if(in_state(GameState::Playing)),
                 spin_player.run_if(in_state(GameState::Playing)),
+                player_debris.run_if(in_state(GameState::Over)),
             ),
         );
     }
@@ -133,5 +135,11 @@ fn spin_player(
 
         let handle = animations.add(spinamation);
         animation_player.play(handle);
+    }
+}
+
+fn player_debris(mut query: Query<(&Velocity, &mut Transform), With<Debris>>, time: Res<Time>) {
+    for (velocity, mut transform) in query.iter_mut() {
+        transform.translation += velocity.value * time.delta_seconds();
     }
 }

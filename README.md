@@ -5,8 +5,7 @@
 ## Elevator pitch
 
 You are a hexagon. You spawn many hexlings. These are your drones. You are helpless without them.
-They are helpless without you. Together, you must survive the hostile geometric darkness in which
-you find yourself.
+They are helpless without you. Together, you must survive the hostile geometric darkness.
 
 ## Inspiration
 
@@ -267,9 +266,9 @@ If there's time:
 - [x] Enemy despawns once destroyed
 - [x] Enemy _disintegrates_ into a cloud of entities once destroyed
 - [x] Player likewise creates a barrage of entities when they are destroyed.
-- [ ] If player is destroyed, _game over_ state displays.
-- [ ] In _game over_, space restarts
-- [ ] In _game over_, escape exits
+- [x] If player is destroyed, _game over_ state displays.
+- [x] In _game over_, enter restarts
+- [x] In _game over_, escape exits
 
 ### Very simple soundtrack
 
