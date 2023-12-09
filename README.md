@@ -274,15 +274,20 @@ If there's time:
 
 **Complete by:** end of day Saturday
 
-- [ ] Don't reach for magical, we need quick and dirty
-- [ ] Recorded and attached to _playing_ state
+- [x] Don't reach for magical, we need quick and dirty
+- [x] Recorded and attached to _playing_ state
+
+### Music controls
+
+**Complete by:** Sunday morning
+
 - [ ] Stops in _pause_ state
 - [ ] If it's simple, add key controls to change volume
 - [ ] Add enemy sound effects (harmonic or harsher/discordant?)
 
 ### Fog of war
 
-**Complete by:** end of day Saturday
+**Complete by:** midday Sunday
 
 - [ ] Player can't see beyond r radius
 - [ ] Player can see radius around each hexling
