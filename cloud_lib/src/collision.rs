@@ -1,5 +1,6 @@
 use bevy::{prelude::*, render::primitives::Aabb, sprite::collide_aabb, utils::HashMap};
 
+use crate::enemy::Debris;
 use crate::hexling::{Hexling, HEXLING_SPEED};
 use crate::map::Wall;
 use crate::movement::Velocity;
@@ -29,6 +30,7 @@ impl Plugin for CollisionPlugin {
                 collision_detection,
                 handle_player_collisions,
                 handle_hexling_collisions,
+                handle_debris_collisions,
             )
                 .chain(),
         );
@@ -135,6 +137,24 @@ fn handle_hexling_collisions(
                     transform.translation.x += HEXLING_SPEED * time.delta_seconds();
                     transform.translation.y += HEXLING_SPEED * time.delta_seconds();
                 }
+            }
+        }
+    }
+}
+
+fn handle_debris_collisions(
+    debris_query: Query<&Debris>,
+    mut query: Query<(&Collider, &mut Velocity), With<Debris>>,
+) {
+    for (collider, mut velocity) in query.iter_mut() {
+        for &collided_entity in collider.colliding_entities.iter() {
+            // Debris only collides with other debris
+            if debris_query.get(collided_entity.0).is_ok() {
+                velocity.value = Vec3::new(
+                    velocity.value.x + rand::random::<f32>() * 0.5 - 0.25,
+                    velocity.value.y + rand::random::<f32>() * 0.5 - 0.25,
+                    0.,
+                );
             }
         }
     }

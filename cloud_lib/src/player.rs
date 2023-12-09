@@ -59,6 +59,7 @@ impl Plugin for PlayerPlugin {
                 (
                     hexling_spawn.run_if(in_state(HexlingSpawnState::Idle)),
                     hexling_spawn_reset.run_if(in_state(HexlingSpawnState::Spawning)),
+                    splodey.run_if(in_state(GameState::Playing)),
                 ),
             )
             .add_event::<events::ChargeEvent>()
@@ -92,6 +93,7 @@ fn spawn_player(
                 attack_rate: 0.,
                 base_damage: 0.,
                 cooldown: 0.,
+                debris_despawn_timer: 0.,
                 health: STARTING_HEALTH,
                 target_list: Vec::new(),
             },
@@ -243,5 +245,42 @@ fn hexling_charge(
                 ..default()
             },
         },));
+    }
+}
+
+// Another opportunity for a generic, but we'll go simple for now.
+fn splodey(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+    query: Query<(Entity, &CombatStats, &Transform), With<Player>>,
+) {
+    let Ok((entity, stats, transform)) = query.get_single() else {
+        return;
+    };
+
+    if stats.health <= 0. {
+        for _ in 0..500 {
+            let shape = MaterialMesh2dBundle {
+                mesh: meshes.add(shape::RegularPolygon::new(6., 6).into()).into(),
+                material: materials.add(ColorMaterial::from(CHARGE_COLOR)),
+                transform: Transform::from_translation(transform.translation).with_rotation(
+                    Quat::from_rotation_z(rand::random::<f32>() * 2. * std::f32::consts::PI),
+                ),
+                ..default()
+            };
+
+            commands
+                .spawn(MovingEntityBundle {
+                    collider: Collider::new(6.),
+                    shape,
+                    velocity: Velocity::new(Vec3::ZERO),
+                })
+                .insert(crate::enemy::Debris {
+                    despawn_timer: 100.,
+                });
+        }
+
+        commands.entity(entity).despawn_recursive();
     }
 }

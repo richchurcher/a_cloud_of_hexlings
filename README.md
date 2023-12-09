@@ -264,9 +264,10 @@ If there's time:
 **Complete by**: midday Saturday
 - [x] Enemy will seek to attack player, which reduces player health
 - [x] Hexlings can damage enemy by colliding with it, which reduces their health also
-- [ ] Enemy despawns once destroyed
-- [ ] Enemy _disintegrates_ into a cloud of entities once destroyed
-- [ ] If player is destroyed, _game over_ state displays
+- [x] Enemy despawns once destroyed
+- [x] Enemy _disintegrates_ into a cloud of entities once destroyed
+- [x] Player likewise creates a barrage of entities when they are destroyed.
+- [ ] If player is destroyed, _game over_ state displays.
 - [ ] In _game over_, space restarts
 - [ ] In _game over_, escape exits
 

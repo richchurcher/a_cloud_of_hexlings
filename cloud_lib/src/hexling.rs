@@ -102,6 +102,7 @@ fn hexling_spawner(
                     attack_rate: 1.,
                     base_damage: 1.,
                     cooldown: 0.,
+                    debris_despawn_timer: 0.,
                     health: 10.,
                     target_list: Vec::new(),
                 },

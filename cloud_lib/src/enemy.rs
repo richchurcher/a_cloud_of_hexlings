@@ -16,6 +16,11 @@ const STARTING_TRANSLATION: Vec3 = Vec3::new(-300., 400., 0.);
 #[derive(Component)]
 pub struct Enemy;
 
+#[derive(Component)]
+pub struct Debris {
+    pub despawn_timer: f32,
+}
+
 pub struct EnemyPlugin;
 
 impl Plugin for EnemyPlugin {
@@ -23,7 +28,13 @@ impl Plugin for EnemyPlugin {
         app.add_systems(OnEnter(LevelState::One), spawn_enemy.run_if(run_once()))
             .add_systems(
                 Update,
-                (maintain_target_list, passive_motion, aggro_motion)
+                (
+                    maintain_target_list,
+                    passive_motion,
+                    aggro_motion,
+                    splodey,
+                    despawn_debris,
+                )
                     .chain()
                     .run_if(in_state(GameState::Playing)),
             )
@@ -43,6 +54,7 @@ pub struct CombatStats {
     // When cooldown reduces to 0, an attack can be made. Starts at 0, reduces by
     // time.delta_seconds() each tick.
     pub cooldown: f32,
+    pub debris_despawn_timer: f32,
     pub health: f32,
     // This list contains all targets. They may not still be within aggro_radius. The list may be
     // re-ordered, and the first entity on the list will always be the primary target.
@@ -72,7 +84,9 @@ fn spawn_enemy(
                 attack_rate: 10.,
                 base_damage: 1.,
                 cooldown: 0.,
-                health: 20.,
+                debris_despawn_timer: 10.,
+                // health: 20.,
+                health: 1.,
                 target_list: Vec::new(),
             },
             MovingEntityBundle {
@@ -189,6 +203,51 @@ fn attack_target(
             stats.cooldown = stats.attack_rate * time.delta_seconds();
         } else {
             stats.cooldown -= time.delta_seconds();
+        }
+    }
+}
+
+fn splodey(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+    query: Query<(Entity, &CombatStats, &Transform), With<Enemy>>,
+) {
+    for (entity, stats, transform) in query.iter() {
+        if stats.health <= 0. {
+            for _ in 0..20 {
+                let shape = MaterialMesh2dBundle {
+                    mesh: meshes.add(shape::RegularPolygon::new(6., 3).into()).into(),
+                    material: materials.add(ColorMaterial::from(COLOR)),
+                    transform: Transform::from_translation(transform.translation).with_rotation(
+                        Quat::from_rotation_z(rand::random::<f32>() * 2. * std::f32::consts::PI),
+                    ),
+                    ..default()
+                };
+
+                commands
+                    .spawn(MovingEntityBundle {
+                        collider: Collider::new(6.),
+                        shape,
+                        velocity: Velocity::new(Vec3::ZERO),
+                    })
+                    .insert(Debris { despawn_timer: 10. });
+            }
+
+            commands.entity(entity).despawn_recursive();
+        }
+    }
+}
+
+fn despawn_debris(
+    mut commands: Commands,
+    mut query: Query<(Entity, &mut Debris)>,
+    time: Res<Time>,
+) {
+    for (entity, mut debris) in query.iter_mut() {
+        debris.despawn_timer -= time.delta_seconds();
+        if debris.despawn_timer <= 0. {
+            commands.entity(entity).despawn_recursive();
         }
     }
 }
