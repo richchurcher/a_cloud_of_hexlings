@@ -1,3 +1,4 @@
+use bevy::audio::{AudioBundle, PlaybackMode, PlaybackSettings};
 use bevy::prelude::*;
 
 use crate::{GameState, LevelState};
@@ -12,13 +13,21 @@ impl Plugin for ResetPlugin {
 }
 
 fn new_game(
+    asset_server: ResMut<AssetServer>,
     mut commands: Commands,
     mut next_state: ResMut<NextState<LevelState>>,
     query: Query<Entity, With<crate::enemy::Debris>>,
 ) {
-    println!(":: new_game ::");
     for entity in query.iter() {
         commands.entity(entity).despawn_recursive();
     }
     next_state.set(LevelState::One);
+
+    commands.spawn((AudioBundle {
+        source: asset_server.load("audio/six_sides.ogg"),
+        settings: PlaybackSettings {
+            mode: PlaybackMode::Once,
+            ..default()
+        },
+    },));
 }
