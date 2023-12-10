@@ -1,4 +1,3 @@
-use bevy::audio::PlaybackMode;
 use bevy::prelude::*;
 
 use crate::GameState;
@@ -7,25 +6,14 @@ pub struct MenuPlugin;
 
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, startup)
-            .add_systems(OnEnter(GameState::Menu), init)
+        app.add_systems(OnEnter(GameState::Menu), init)
             .add_systems(Update, menu.run_if(in_state(GameState::Menu)))
-            .add_systems(OnExit(GameState::Menu), despawn_screen::<MainMenuScreen>);
+            .add_systems(OnExit(GameState::Menu), despawn_thing::<MainMenuScreen>);
     }
 }
 
 #[derive(Component)]
 struct MainMenuScreen;
-
-fn startup(asset_server: Res<AssetServer>, mut commands: Commands) {
-    commands.spawn((AudioBundle {
-        source: asset_server.load("audio/e.ogg"),
-        settings: PlaybackSettings {
-            mode: PlaybackMode::Once,
-            ..default()
-        },
-    },));
-}
 
 fn init(mut commands: Commands) {
     commands
@@ -79,7 +67,7 @@ fn menu(
     }
 }
 
-fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
+pub fn despawn_thing<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
     for entity in &to_despawn {
         commands.entity(entity).despawn_recursive();
     }

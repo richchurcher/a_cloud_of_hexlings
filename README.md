@@ -162,6 +162,8 @@ short time. Triggered by game events.
 - **Space**: switch between charge and recall states
 - **Left Shift**: spawn hexling(s)
 - **Escape**: pause, with menu option to quit
+- **M**: toggle soundtrack
+- **+**/**-**: overall sound volume
 
 If there's time:
 - **R/Q**: fine-tune the hexlings' direction of travel, perhaps in an arc?
@@ -281,8 +283,9 @@ If there's time:
 
 **Complete by:** Sunday morning
 
-- [ ] Stops in _pause_ state
-- [ ] If it's simple, add key controls to change volume
+- [x] Stops in _pause_ state
+- [x] Press `M` to mute soundtrack
+- [x] If it's simple, add key controls to change volume
 - [ ] Add enemy sound effects (harmonic or harsher/discordant?)
 
 ### Fog of war

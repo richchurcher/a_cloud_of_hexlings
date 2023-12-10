@@ -1,6 +1,7 @@
-use bevy::audio::PlaybackMode;
+use bevy::audio::{PlaybackMode, Volume};
 use bevy::prelude::*;
 
+use crate::sound::SoundSettings;
 use crate::GameState;
 
 pub struct PauseMenuPlugin;
@@ -17,11 +18,16 @@ impl Plugin for PauseMenuPlugin {
 #[derive(Component)]
 struct PauseMenuScreen;
 
-fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
+fn init(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
+    sound_settings: Res<SoundSettings>,
+) {
     commands.spawn((AudioBundle {
         source: asset_server.load("audio/tap-tap-tap.ogg"),
         settings: PlaybackSettings {
             mode: PlaybackMode::Once,
+            volume: Volume::new_relative(sound_settings.effects_volume),
             ..default()
         },
     },));

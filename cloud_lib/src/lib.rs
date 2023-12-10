@@ -13,6 +13,7 @@ pub mod over_menu;
 pub mod pause_menu;
 pub mod player;
 pub mod reset;
+pub mod sound;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 pub enum GameState {

@@ -23,6 +23,7 @@ fn main() {
         .add_plugins(cloud_lib::menu::MenuPlugin)
         .add_plugins(cloud_lib::pause_menu::PauseMenuPlugin)
         .add_plugins(cloud_lib::over_menu::OverMenuPlugin)
+        .add_plugins(cloud_lib::sound::SoundPlugin)
         .add_plugins(cloud_lib::reset::ResetPlugin)
         .add_plugins(cloud_lib::player::PlayerPlugin)
         .add_plugins(cloud_lib::collision::CollisionPlugin)

@@ -1,12 +1,15 @@
 pub mod events;
 
-use bevy::audio::PlaybackMode;
-use bevy::prelude::*;
-use bevy::sprite::MaterialMesh2dBundle;
+use bevy::{
+    audio::{PlaybackMode, Volume},
+    prelude::*,
+    sprite::MaterialMesh2dBundle,
+};
 
 use crate::collision::Collider;
 use crate::enemy::CombatStats;
 use crate::movement::{MovingEntityBundle, Velocity};
+use crate::sound::SoundSettings;
 use crate::GameState;
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
@@ -171,6 +174,7 @@ fn hexling_recall(
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
     mut query: Query<Entity, With<Player>>,
+    sound_settings: Res<crate::sound::SoundSettings>,
 ) {
     let Ok(entity) = query.get_single_mut() else {
         return;
@@ -182,6 +186,7 @@ fn hexling_recall(
             source: asset_server.load("audio/a.ogg"),
             settings: PlaybackSettings {
                 mode: PlaybackMode::Once,
+                volume: Volume::new_relative(sound_settings.effects_volume),
                 ..default()
             },
         },));
@@ -195,56 +200,44 @@ fn hexling_charge(
     keyboard_input: Res<Input<KeyCode>>,
     mut next_state: ResMut<NextState<HexlingState>>,
     mut query: Query<Entity, With<Player>>,
+    sound_settings: Res<SoundSettings>,
 ) {
     let Ok(entity) = query.get_single_mut() else {
         return;
     };
     if keyboard_input.just_released(KeyCode::Space) {
+        let settings = PlaybackSettings {
+            mode: PlaybackMode::Once,
+            volume: Volume::new_relative(sound_settings.effects_volume),
+            ..default()
+        };
         // Is this smart? Probably not, but it makes a neat effect, and is slightly different with
         // its timings each time!
         ev_charge.send(events::ChargeEvent(entity));
         next_state.set(HexlingState::Charging);
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/e.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/e2.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/a.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/b.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/g.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
         commands.spawn((AudioBundle {
             source: asset_server.load("audio/fsharp3.ogg"),
-            settings: PlaybackSettings {
-                mode: PlaybackMode::Once,
-                ..default()
-            },
+            settings,
         },));
     }
 }

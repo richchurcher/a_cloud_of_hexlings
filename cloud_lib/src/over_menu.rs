@@ -1,6 +1,7 @@
-use bevy::audio::PlaybackMode;
+use bevy::audio::{PlaybackMode, Volume};
 use bevy::prelude::*;
 
+use crate::sound::SoundSettings;
 use crate::GameState;
 
 pub struct OverMenuPlugin;
@@ -16,34 +17,31 @@ impl Plugin for OverMenuPlugin {
 #[derive(Component)]
 struct OverMenuScreen;
 
-fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
+fn init(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
+    sound_settings: Res<SoundSettings>,
+) {
+    let settings = PlaybackSettings {
+        mode: PlaybackMode::Loop,
+        volume: Volume::new_relative(sound_settings.effects_volume),
+        ..default()
+    };
     commands.spawn((AudioBundle {
         source: asset_server.load("audio/thud.ogg"),
-        settings: PlaybackSettings {
-            mode: PlaybackMode::Once,
-            ..default()
-        },
+        settings,
     },));
     commands.spawn((AudioBundle {
         source: asset_server.load("audio/tap.ogg"),
-        settings: PlaybackSettings {
-            mode: PlaybackMode::Once,
-            ..default()
-        },
+        settings,
     },));
     commands.spawn((AudioBundle {
         source: asset_server.load("audio/e.ogg"),
-        settings: PlaybackSettings {
-            mode: PlaybackMode::Once,
-            ..default()
-        },
+        settings,
     },));
     commands.spawn((AudioBundle {
         source: asset_server.load("audio/d.ogg"),
-        settings: PlaybackSettings {
-            mode: PlaybackMode::Once,
-            ..default()
-        },
+        settings,
     },));
 
     commands

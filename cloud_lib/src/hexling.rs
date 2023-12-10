@@ -1,4 +1,4 @@
-use bevy::audio::{PlaybackMode, PlaybackSettings};
+use bevy::audio::{PlaybackMode, PlaybackSettings, Volume};
 use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 use bevy_rand::prelude::*;
@@ -10,6 +10,7 @@ use crate::enemy::{CombatStats, Enemy};
 use crate::map::{Source, Wall};
 use crate::movement::{MovingEntityBundle, Velocity};
 use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
+use crate::sound::SoundSettings;
 
 const HEXLING_DETERIORATION_FACTOR: f32 = 0.1;
 const HEXLING_RADIUS: f32 = 6.;
@@ -49,6 +50,7 @@ fn hexling_spawner(
     mut ev_spawn_hexling: EventReader<SpawnHexlingEvent>,
     mut player_query: Query<&mut Transform, With<Player>>,
     mut query: Query<&mut EntropyComponent<ChaCha8Rng>, With<Source>>,
+    sound_settings: Res<SoundSettings>,
 ) {
     let Ok(mut a_rng) = query.get_single_mut() else {
         return;
@@ -63,6 +65,7 @@ fn hexling_spawner(
             source: asset_server.load("audio/e2.ogg"),
             settings: PlaybackSettings {
                 mode: PlaybackMode::Once,
+                volume: Volume::new_relative(sound_settings.effects_volume),
                 ..default()
             },
         },));
