@@ -3,6 +3,7 @@ use bevy::prelude::*;
 pub mod camera;
 pub mod collision;
 pub mod enemy;
+pub mod fog;
 pub mod hexling;
 pub mod map;
 pub mod menu;

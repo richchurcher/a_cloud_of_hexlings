@@ -25,6 +25,7 @@ fn main() {
         .add_plugins(cloud_lib::sound::SoundPlugin)
         .add_plugins(cloud_lib::reset::ResetPlugin)
         .add_plugins(cloud_lib::player::PlayerPlugin)
+        .add_plugins(cloud_lib::fog::FogPlugin)
         .add_plugins(cloud_lib::collision::CollisionPlugin)
         .add_plugins(cloud_lib::movement::MovementPlugin)
         .add_plugins(cloud_lib::map::MapPlugin)
