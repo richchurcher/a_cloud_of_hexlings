@@ -1,9 +1,13 @@
-use bevy::prelude::*;
-use bevy::sprite::MaterialMesh2dBundle;
+use bevy::{
+    audio::{PlaybackMode, Volume},
+    prelude::*,
+    sprite::MaterialMesh2dBundle,
+};
 
 use crate::collision::Collider;
 use crate::movement::{MovingEntityBundle, Velocity};
 use crate::player::Player;
+use crate::sound::SoundSettings;
 use crate::GameState;
 
 pub const COLOR: Color = Color::rgb(0.9, 0.0, 0.1);
@@ -186,8 +190,11 @@ fn maintain_target_list(
 }
 
 fn attack_target(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
     mut enemy_query: Query<(&mut CombatStats, &Transform), With<Enemy>>,
     mut friendly_query: Query<(&mut CombatStats, &Transform), Without<Enemy>>,
+    sound_settings: Res<SoundSettings>,
     time: Res<Time>,
 ) {
     for (mut stats, transform) in enemy_query.iter_mut() {
@@ -201,6 +208,15 @@ fn attack_target(
         };
         let distance = (transform.translation - target_transform.translation).length();
         if stats.cooldown <= 0. && target_stats.health > 0. && distance < stats.attack_range {
+            commands.spawn(AudioBundle {
+                source: asset_server.load("audio/enemy_basic_attack.ogg"),
+                settings: PlaybackSettings {
+                    mode: PlaybackMode::Once,
+                    volume: Volume::new_relative(sound_settings.effects_volume / 2.),
+                    ..default()
+                },
+            });
+
             target_stats.health -= stats.base_damage;
             stats.cooldown = stats.attack_rate * time.delta_seconds();
         } else {
@@ -210,10 +226,12 @@ fn attack_target(
 }
 
 fn splodey(
+    asset_server: Res<AssetServer>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     query: Query<(Entity, &CombatStats, &Transform), With<Enemy>>,
+    sound_settings: Res<SoundSettings>,
 ) {
     for (entity, stats, transform) in query.iter() {
         if stats.health <= 0. {
@@ -237,6 +255,28 @@ fn splodey(
             }
 
             commands.entity(entity).despawn_recursive();
+
+            let settings = PlaybackSettings {
+                mode: PlaybackMode::Once,
+                volume: Volume::new_relative(sound_settings.effects_volume),
+                ..default()
+            };
+            commands.spawn((AudioBundle {
+                source: asset_server.load("audio/enemy_c.ogg"),
+                settings,
+            },));
+            commands.spawn((AudioBundle {
+                source: asset_server.load("audio/enemy_f.ogg"),
+                settings,
+            },));
+            commands.spawn((AudioBundle {
+                source: asset_server.load("audio/enemy_g.ogg"),
+                settings,
+            },));
+            commands.spawn((AudioBundle {
+                source: asset_server.load("audio/enemy_a.ogg"),
+                settings,
+            },));
         }
     }
 }

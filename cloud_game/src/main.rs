@@ -18,7 +18,6 @@ fn main() {
         }))
         .add_state::<cloud_lib::GameState>()
         .add_state::<cloud_lib::LevelState>()
-        // .add_plugins(cloud_lib::assets::AssetsPlugin)
         .add_plugins(cloud_lib::camera::CameraPlugin)
         .add_plugins(cloud_lib::menu::MenuPlugin)
         .add_plugins(cloud_lib::pause_menu::PauseMenuPlugin)
@@ -31,6 +30,5 @@ fn main() {
         .add_plugins(cloud_lib::map::MapPlugin)
         .add_plugins(cloud_lib::hexling::HexlingPlugin)
         .add_plugins(cloud_lib::enemy::EnemyPlugin)
-        // .add_plugins(cloud_lib::debug::DebugPlugin)
         .run();
 }

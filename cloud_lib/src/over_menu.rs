@@ -23,7 +23,7 @@ fn init(
     sound_settings: Res<SoundSettings>,
 ) {
     let settings = PlaybackSettings {
-        mode: PlaybackMode::Loop,
+        mode: PlaybackMode::Once,
         volume: Volume::new_relative(sound_settings.effects_volume),
         ..default()
     };

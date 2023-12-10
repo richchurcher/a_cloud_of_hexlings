@@ -1,9 +1,7 @@
 use bevy::prelude::*;
 
-pub mod assets;
 pub mod camera;
 pub mod collision;
-pub mod debug;
 pub mod enemy;
 pub mod hexling;
 pub mod map;

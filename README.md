@@ -286,7 +286,7 @@ If there's time:
 - [x] Stops in _pause_ state
 - [x] Press `M` to mute soundtrack
 - [x] If it's simple, add key controls to change volume
-- [ ] Add enemy sound effects (harmonic or harsher/discordant?)
+- [x] Add enemy sound effects (harmonic or harsher/discordant?)
 
 ### Fog of war
 
@@ -311,6 +311,7 @@ If there's time:
 - [ ] Say, four rooms with boss at end
 - [ ] Distribute enemies throughout
 - [ ] Distribute food for hexlings
+- [ ] Hexling colour degrades to grey when damaged
 - [ ] Hexlings can feed to regain health
 - [ ] Ensure hexling damage is function of health
 - [ ] For the purposes of the theme, allow a _lot_ of hexlings? But also a lot of enemies, for
