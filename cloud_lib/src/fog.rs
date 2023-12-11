@@ -3,6 +3,7 @@ use bevy::{
     render::render_resource::{AsBindGroup, ShaderRef},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
 };
+
 use std::f32::consts::PI;
 use type_uuid::TypeUuid;
 
@@ -18,7 +19,7 @@ pub struct FogMaterial {
     #[uniform(0)]
     pub light_radius: f32,
     #[uniform(1)]
-    pub player_position: Vec2,
+    pub player_position: Vec3,
 }
 
 impl Material2d for FogMaterial {
@@ -50,8 +51,8 @@ fn init(
             mesh: meshes.add(shape::RegularPolygon::new(1., 4).into()).into(),
             material: materials.add(FogMaterial {
                 alpha_mode: AlphaMode::Blend,
-                light_radius: 1500.0,
-                player_position: Vec2::new(0., 0.),
+                light_radius: 0.3,
+                player_position: Vec3::ZERO,
             }),
             transform: Transform::from_translation(STARTING_TRANSLATION)
                 .with_scale(Vec3::splat(5000.))
@@ -73,8 +74,12 @@ fn update_fog(
         return;
     };
     let fog_material = materials.get_mut(fog_handle).unwrap();
-    fog_material.player_position = player_transform.translation.truncate().normalize();
+    fog_material.player_position = player_transform.translation;
 
     // Keep the mesh centered on the player
-    fog_transform.translation = player_transform.translation;
+    fog_transform.translation = Vec3::new(
+        player_transform.translation.x,
+        player_transform.translation.y,
+        1.,
+    );
 }
