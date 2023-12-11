@@ -1,77 +1,80 @@
 use bevy::{
     prelude::*,
-    render::{
-        mesh::{Indices, VertexAttributeValues},
-        render_resource::{AsBindGroup, PrimitiveTopology, ShaderRef},
-    },
+    render::render_resource::{AsBindGroup, ShaderRef},
+    sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
+};
+use std::f32::consts::PI;
+use type_uuid::TypeUuid;
+
+use crate::{
+    player::{Player, STARTING_TRANSLATION},
+    GameState,
 };
 
-#[derive(AsBindGroup, Asset, TypePath, Debug, Clone)]
+#[derive(AsBindGroup, Asset, Clone, Debug, TypePath, TypeUuid)]
+#[uuid = "c4a06f14-bd8d-4949-bfdb-b84719933e76"]
 pub struct FogMaterial {
-    // #[uniform(0)]
-    // color: Color,
-    // color_texture: Option<Handle<Image>>,
-    alpha_mode: AlphaMode,
+    pub alpha_mode: AlphaMode,
+    #[uniform(0)]
+    pub light_radius: f32,
+    #[uniform(1)]
+    pub player_position: Vec2,
 }
 
-impl Material for FogMaterial {
+impl Material2d for FogMaterial {
     fn fragment_shader() -> ShaderRef {
         "shaders/fog.wgsl".into()
     }
-
-    fn alpha_mode(&self) -> AlphaMode {
-        self.alpha_mode
-    }
 }
+
+#[derive(Component)]
+pub struct Fog;
 
 pub struct FogPlugin;
 
 impl Plugin for FogPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(MaterialPlugin::<FogMaterial>::default())
-            .add_systems(Startup, init);
+        app.add_plugins(Material2dPlugin::<FogMaterial>::default())
+            .add_systems(OnEnter(GameState::Playing), init)
+            .add_systems(Update, update_fog.run_if(in_state(GameState::Playing)));
     }
 }
 
-const MASK_WIDTH: f32 = 100.;
-const MASK_HEIGHT: f32 = 100.;
-
 fn init(
-    asset_server: Res<AssetServer>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<FogMaterial>>,
 ) {
-    let mut mesh = Mesh::new(PrimitiveTopology::TriangleList)
-        .with_inserted_attribute(
-            Mesh::ATTRIBUTE_POSITION,
-            VertexAttributeValues::Float32x3(vec![
-                [0.0, 0.0, 1.0],
-                [MASK_WIDTH, 0.0, 0.0],
-                [MASK_WIDTH, MASK_HEIGHT, 0.0],
-                [0.0, MASK_HEIGHT, 0.0],
-            ]),
-        )
-        .with_inserted_attribute(
-            Mesh::ATTRIBUTE_NORMAL,
-            VertexAttributeValues::Float32x3(vec![
-                [0., 0., 1.],
-                [0., 0., 1.],
-                [0., 0., 1.],
-                [0., 0., 1.],
-            ]),
-        )
-        .with_inserted_attribute(
-            Mesh::ATTRIBUTE_UV_0,
-            VertexAttributeValues::Float32x2(vec![[0., 0.], [1., 0.], [1., 1.], [0., 1.]]),
-        )
-        .with_indices(Some(Indices::U32(vec![0, 1, 2, 2, 3, 0])));
-    let handle = meshes.add(mesh);
-    commands.spawn(MaterialMeshBundle::<FogMaterial> {
-        mesh: handle,
-        material: materials.add(FogMaterial {
-            alpha_mode: AlphaMode::Blend,
-        }),
-        ..Default::default()
-    });
+    commands
+        .spawn(MaterialMesh2dBundle::<FogMaterial> {
+            mesh: meshes.add(shape::RegularPolygon::new(1., 4).into()).into(),
+            material: materials.add(FogMaterial {
+                alpha_mode: AlphaMode::Blend,
+                light_radius: 1500.0,
+                player_position: Vec2::new(0., 0.),
+            }),
+            transform: Transform::from_translation(STARTING_TRANSLATION)
+                .with_scale(Vec3::splat(5000.))
+                .with_rotation(Quat::from_rotation_z(PI / 4.)),
+            ..Default::default()
+        })
+        .insert(Fog);
+}
+
+fn update_fog(
+    mut handle: Query<(&Handle<FogMaterial>, &mut Transform), With<Fog>>,
+    mut materials: ResMut<Assets<FogMaterial>>,
+    query: Query<&Transform, (With<Player>, Without<Fog>)>,
+) {
+    let Ok(player_transform) = query.get_single() else {
+        return;
+    };
+    let Ok((fog_handle, mut fog_transform)) = handle.get_single_mut() else {
+        return;
+    };
+    let fog_material = materials.get_mut(fog_handle).unwrap();
+    fog_material.player_position = player_transform.translation.truncate().normalize();
+
+    // Keep the mesh centered on the player
+    fog_transform.translation = player_transform.translation;
 }

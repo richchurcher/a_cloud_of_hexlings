@@ -71,7 +71,6 @@ pub fn spawn_enemy(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    println!(":: spawn_enemy ::");
     let shape = MaterialMesh2dBundle {
         mesh: meshes
             .add(shape::RegularPolygon::new(RADIUS, 8).into())

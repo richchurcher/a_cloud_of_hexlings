@@ -3,9 +3,11 @@ use bevy::{
     prelude::*,
 };
 
-use crate::movement::Velocity;
-use crate::player;
-use crate::GameState;
+use crate::{
+    movement::Velocity,
+    player::{Player, STARTING_TRANSLATION},
+    GameState,
+};
 
 const CAMERA_PLAYER_DISTANCE: f32 = 200.;
 const CAMERA_SPEED: f32 = 200.;
@@ -27,7 +29,7 @@ fn startup(mut commands: Commands) {
                 ..default()
             },
             tonemapping: Tonemapping::TonyMcMapface,
-            transform: Transform::from_translation(player::STARTING_TRANSLATION),
+            transform: Transform::from_translation(STARTING_TRANSLATION),
             ..default()
         },
         BloomSettings::default(),
@@ -37,7 +39,7 @@ fn startup(mut commands: Commands) {
 
 fn camera_follow(
     mut camera_query: Query<(&Transform, &mut Velocity), With<Camera>>,
-    player_query: Query<&Transform, With<player::Player>>,
+    player_query: Query<&Transform, With<Player>>,
 ) {
     let Ok(player_transform) = player_query.get_single() else {
         return;
