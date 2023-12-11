@@ -2,11 +2,15 @@ use bevy::prelude::*;
 use bevy::sprite::MaterialMesh2dBundle;
 use std::f32::consts::PI;
 
-use crate::collision::Collider;
-use crate::enemy::Debris;
-use crate::player::events::{ChargeEvent, RecallEvent, SpawnHexlingEvent};
-use crate::player::{Player, CHARGE_COLOR, RECALL_COLOR};
-use crate::GameState;
+use crate::{
+    collision::Collider,
+    enemy::Debris,
+    fog::{the_function_that_dare_not_speak_its_name, Fog, FogMaterial, HexlingFogTracker},
+    hexling::Hexling,
+    player::events::{ChargeEvent, RecallEvent, SpawnHexlingEvent},
+    player::{Player, CHARGE_COLOR, RECALL_COLOR},
+    GameState,
+};
 
 #[derive(Component, Debug)]
 pub struct Velocity {
@@ -42,9 +46,42 @@ impl Plugin for MovementPlugin {
     }
 }
 
-fn update_position(mut query: Query<(&Velocity, &mut Transform)>, time: Res<Time>) {
-    for (velocity, mut transform) in query.iter_mut() {
+fn update_position(
+    mut fog_tracker: ResMut<HexlingFogTracker>,
+    mut handle: Query<&Handle<FogMaterial>, With<Fog>>,
+    hexling_query: Query<&Hexling>,
+    mut materials: ResMut<Assets<FogMaterial>>,
+    mut query: Query<(Entity, &Velocity, &mut Transform)>,
+    time: Res<Time>,
+) {
+    let Ok(fog_handle) = handle.get_single_mut() else {
+        return;
+    };
+    let fog_material = materials.get_mut(fog_handle).unwrap();
+
+    for (entity, velocity, mut transform) in query.iter_mut() {
         transform.translation += velocity.value * time.delta_seconds();
+
+        // TODO: hideous jamstrousity.
+        if hexling_query.get(entity).is_ok() {
+            let Some((_, initial)) = fog_tracker
+                .hexling_entity_positions
+                .get::<Entity>(&entity.to_owned())
+            else {
+                return;
+            };
+            let s1 = String::from(initial);
+            let s2 = String::from(initial);
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (transform.translation, s1));
+
+            the_function_that_dare_not_speak_its_name(
+                fog_material,
+                &transform.translation,
+                &String::from(s2),
+            )
+        }
     }
 }
 

@@ -90,13 +90,99 @@ pub fn spawn_enemy(
                 base_damage: 1.,
                 cooldown: 0.,
                 debris_despawn_timer: 10.,
-                // health: 20.,
-                health: 1.,
+                health: 3.,
                 target_list: Vec::new(),
             },
             MovingEntityBundle {
                 collider: Collider::new(RADIUS),
                 shape,
+                velocity: Velocity::new(Vec3::ZERO),
+            },
+            Name::new("enemy"),
+        ))
+        .insert(Enemy);
+
+    commands
+        .spawn((
+            AnimationPlayer::default(),
+            CombatStats {
+                aggro_radius: 200.,
+                attack_range: 100.,
+                attack_rate: 10.,
+                base_damage: 1.,
+                cooldown: 0.,
+                debris_despawn_timer: 10.,
+                health: 3.,
+                target_list: Vec::new(),
+            },
+            MovingEntityBundle {
+                collider: Collider::new(RADIUS),
+                shape: MaterialMesh2dBundle {
+                    mesh: meshes
+                        .add(shape::RegularPolygon::new(RADIUS, 8).into())
+                        .into(),
+                    material: materials.add(ColorMaterial::from(COLOR)),
+                    transform: Transform::from_translation(Vec3::new(300., 400., 0.)),
+                    ..default()
+                },
+                velocity: Velocity::new(Vec3::ZERO),
+            },
+            Name::new("enemy"),
+        ))
+        .insert(Enemy);
+
+    commands
+        .spawn((
+            AnimationPlayer::default(),
+            CombatStats {
+                aggro_radius: 200.,
+                attack_range: 100.,
+                attack_rate: 10.,
+                base_damage: 1.,
+                cooldown: 0.,
+                debris_despawn_timer: 10.,
+                health: 3.,
+                target_list: Vec::new(),
+            },
+            MovingEntityBundle {
+                collider: Collider::new(RADIUS),
+                shape: MaterialMesh2dBundle {
+                    mesh: meshes
+                        .add(shape::RegularPolygon::new(RADIUS, 8).into())
+                        .into(),
+                    material: materials.add(ColorMaterial::from(COLOR)),
+                    transform: Transform::from_translation(Vec3::new(-300., -400., 0.)),
+                    ..default()
+                },
+                velocity: Velocity::new(Vec3::ZERO),
+            },
+            Name::new("enemy"),
+        ))
+        .insert(Enemy);
+
+    commands
+        .spawn((
+            AnimationPlayer::default(),
+            CombatStats {
+                aggro_radius: 200.,
+                attack_range: 100.,
+                attack_rate: 10.,
+                base_damage: 1.,
+                cooldown: 0.,
+                debris_despawn_timer: 10.,
+                health: 3.,
+                target_list: Vec::new(),
+            },
+            MovingEntityBundle {
+                collider: Collider::new(RADIUS),
+                shape: MaterialMesh2dBundle {
+                    mesh: meshes
+                        .add(shape::RegularPolygon::new(RADIUS, 8).into())
+                        .into(),
+                    material: materials.add(ColorMaterial::from(COLOR)),
+                    transform: Transform::from_translation(Vec3::new(300., -400., 0.)),
+                    ..default()
+                },
                 velocity: Velocity::new(Vec3::ZERO),
             },
             Name::new("enemy"),

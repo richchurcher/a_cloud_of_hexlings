@@ -5,12 +5,15 @@ use bevy_rand::prelude::*;
 use rand::prelude::Rng;
 use std::f32::consts::PI;
 
-use crate::collision::Collider;
-use crate::enemy::{CombatStats, Enemy};
-use crate::map::{Source, Wall};
-use crate::movement::{MovingEntityBundle, Velocity};
-use crate::player::{events::SpawnHexlingEvent, HexlingState, Player};
-use crate::sound::SoundSettings;
+use crate::{
+    collision::Collider,
+    enemy::{CombatStats, Enemy},
+    fog::{Fog, FogMaterial, HexlingFogTracker},
+    map::{Source, Wall},
+    movement::{MovingEntityBundle, Velocity},
+    player::{events::SpawnHexlingEvent, HexlingState, Player},
+    sound::SoundSettings,
+};
 
 const HEXLING_DETERIORATION_FACTOR: f32 = 0.1;
 const HEXLING_RADIUS: f32 = 6.;
@@ -45,6 +48,9 @@ impl Plugin for HexlingPlugin {
 fn hexling_spawner(
     asset_server: Res<AssetServer>,
     mut commands: Commands,
+    mut fog_materials: ResMut<Assets<FogMaterial>>,
+    mut fog_tracker: ResMut<HexlingFogTracker>,
+    mut handle: Query<&Handle<FogMaterial>, With<Fog>>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     mut ev_spawn_hexling: EventReader<SpawnHexlingEvent>,
@@ -58,6 +64,11 @@ fn hexling_spawner(
     let Ok(player_transform) = player_query.get_single_mut() else {
         return;
     };
+    let Ok(fog_handle) = handle.get_single_mut() else {
+        return;
+    };
+    let fog_material = fog_materials.get_mut(fog_handle).unwrap();
+
     if !ev_spawn_hexling.is_empty() {
         ev_spawn_hexling.clear();
 
@@ -92,7 +103,7 @@ fn hexling_spawner(
                 .with_rotation(Quat::from_rotation_z(a_rng.gen_range(0.0..PI))),
             ..default()
         };
-        commands
+        let entity = commands
             .spawn((
                 MovingEntityBundle {
                     collider: Collider::new(HEXLING_RADIUS),
@@ -111,7 +122,145 @@ fn hexling_spawner(
                     target_list: Vec::new(),
                 },
             ))
-            .insert(Hexling);
+            .insert(Hexling)
+            .id();
+
+        // Poke a hole in the fog of war at the hexling's new position
+        // TODO: this hideous nightmare is only a gamejam mechanism to offset the fact I can't pass
+        // arrays into WGSL. I imagine there's a way to do it with storage buffers, but I hear it's
+        // not supported on Web yet?
+        // Thank goodness for neovim macros.
+        if fog_material.hexling_a == Vec3::ZERO {
+            fog_material.hexling_a = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "a".to_string()));
+        } else if fog_material.hexling_b == Vec3::ZERO {
+            fog_material.hexling_b = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "b".to_string()));
+        } else if fog_material.hexling_c == Vec3::ZERO {
+            fog_material.hexling_c = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "c".to_string()));
+        } else if fog_material.hexling_d == Vec3::ZERO {
+            fog_material.hexling_d = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "d".to_string()));
+        } else if fog_material.hexling_e == Vec3::ZERO {
+            fog_material.hexling_e = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "e".to_string()));
+        } else if fog_material.hexling_f == Vec3::ZERO {
+            fog_material.hexling_f = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "f".to_string()));
+        } else if fog_material.hexling_g == Vec3::ZERO {
+            fog_material.hexling_g = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "g".to_string()));
+        } else if fog_material.hexling_h == Vec3::ZERO {
+            fog_material.hexling_h = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "h".to_string()));
+        } else if fog_material.hexling_i == Vec3::ZERO {
+            fog_material.hexling_i = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "i".to_string()));
+        } else if fog_material.hexling_j == Vec3::ZERO {
+            fog_material.hexling_j = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "j".to_string()));
+        } else if fog_material.hexling_k == Vec3::ZERO {
+            fog_material.hexling_k = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "k".to_string()));
+        } else if fog_material.hexling_l == Vec3::ZERO {
+            fog_material.hexling_l = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "l".to_string()));
+        } else if fog_material.hexling_m == Vec3::ZERO {
+            fog_material.hexling_m = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "m".to_string()));
+        } else if fog_material.hexling_n == Vec3::ZERO {
+            fog_material.hexling_n = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "n".to_string()));
+        } else if fog_material.hexling_o == Vec3::ZERO {
+            fog_material.hexling_o = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "o".to_string()));
+        } else if fog_material.hexling_p == Vec3::ZERO {
+            fog_material.hexling_p = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "p".to_string()));
+        } else if fog_material.hexling_q == Vec3::ZERO {
+            fog_material.hexling_q = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "q".to_string()));
+        } else if fog_material.hexling_r == Vec3::ZERO {
+            fog_material.hexling_r = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "r".to_string()));
+        } else if fog_material.hexling_s == Vec3::ZERO {
+            fog_material.hexling_s = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "s".to_string()));
+        } else if fog_material.hexling_t == Vec3::ZERO {
+            fog_material.hexling_t = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "t".to_string()));
+        } else if fog_material.hexling_u == Vec3::ZERO {
+            fog_material.hexling_u = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "u".to_string()));
+        } else if fog_material.hexling_v == Vec3::ZERO {
+            fog_material.hexling_v = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "v".to_string()));
+        } else if fog_material.hexling_w == Vec3::ZERO {
+            fog_material.hexling_w = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "w".to_string()));
+        } else if fog_material.hexling_x == Vec3::ZERO {
+            fog_material.hexling_x = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "x".to_string()));
+        } else if fog_material.hexling_y == Vec3::ZERO {
+            fog_material.hexling_y = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "y".to_string()));
+        } else if fog_material.hexling_z == Vec3::ZERO {
+            fog_material.hexling_z = translation;
+            fog_tracker
+                .hexling_entity_positions
+                .insert(entity, (translation, "z".to_string()));
+        }
     }
 }
 

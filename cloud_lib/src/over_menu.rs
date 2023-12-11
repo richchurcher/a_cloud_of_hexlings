@@ -1,8 +1,7 @@
 use bevy::audio::{PlaybackMode, Volume};
 use bevy::prelude::*;
 
-use crate::sound::SoundSettings;
-use crate::GameState;
+use crate::{fog::Fog, sound::SoundSettings, GameState};
 
 pub struct OverMenuPlugin;
 
@@ -20,8 +19,12 @@ struct OverMenuScreen;
 fn init(
     asset_server: Res<AssetServer>,
     mut commands: Commands,
+    query: Query<Entity, With<Fog>>,
     sound_settings: Res<SoundSettings>,
 ) {
+    let fog = query.single();
+    commands.entity(fog).despawn_recursive();
+
     let settings = PlaybackSettings {
         mode: PlaybackMode::Once,
         volume: Volume::new_relative(sound_settings.effects_volume),
